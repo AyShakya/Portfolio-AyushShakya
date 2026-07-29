@@ -123,7 +123,7 @@ export default function Works() {
 
           {/* Header Grid */}
           <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-0 my-0 p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
-            <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase leading-none">
+            <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-[-0.04em] text-neutral-900 dark:text-neutral-100 uppercase leading-none">
               {work.title}
             </h1>
             <div className="flex flex-col gap-2 justify-center mt-6 lg:mt-0">
@@ -199,7 +199,7 @@ export default function Works() {
               {/* Row 3A: Steps, Time, Spotify cards */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
                 {/* Steps & Streak */}
-                <div className="bg-white dark:bg-white text-neutral-900 p-5 rounded-2xl flex flex-col justify-between aspect-square border border-neutral-200 shadow-sm">
+                <div className="bg-[#E3E3E1] dark:bg-[#E3E3E1] text-[#111111] p-5 rounded-2xl flex flex-col justify-between aspect-square border border-neutral-200 shadow-sm">
                   <div className="flex flex-col gap-1">
                     <span className="text-[10px] font-mono tracking-widest text-neutral-500 uppercase">Total Steps</span>
                     <p className="text-3xl font-pixel font-bold leading-none">5,543</p>
@@ -245,7 +245,7 @@ export default function Works() {
                 
                 {/* 2x2 Circle Buttons panel */}
                 <div className="md:col-span-1 grid grid-cols-2 gap-3 justify-items-center items-center py-2">
-                  <button className="w-12 h-12 md:w-14 md:h-14 bg-white dark:bg-white border border-neutral-250 rounded-full flex items-center justify-center text-neutral-900 cursor-pointer shadow-sm hover:scale-[1.03] active:scale-95 transition-all">
+                  <button className="w-12 h-12 md:w-14 md:h-14 bg-[#E3E3E1] dark:bg-[#E3E3E1] border border-[#CFCFCF] rounded-full flex items-center justify-center text-[#111111] cursor-pointer shadow-sm hover:scale-[1.03] active:scale-95 transition-all">
                     <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
                       <rect width="20" height="15" x="2" y="3" rx="2"/>
                       <path d="M12 18H5M12 18H19M12 18v3"/>
@@ -257,22 +257,22 @@ export default function Works() {
                       <path d="M7 8h10M7 12h10M7 16h6"/>
                     </svg>
                   </button>
-                  <button className="w-12 h-12 md:w-14 md:h-14 bg-white dark:bg-white border border-neutral-250 rounded-full flex items-center justify-center text-neutral-900 cursor-pointer shadow-sm hover:scale-[1.03] active:scale-95 transition-all">
+                  <button className="w-12 h-12 md:w-14 md:h-14 bg-[#E3E3E1] dark:bg-[#E3E3E1] border border-[#CFCFCF] rounded-full flex items-center justify-center text-[#111111] cursor-pointer shadow-sm hover:scale-[1.03] active:scale-95 transition-all">
                     <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
                       <path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-13-7-13S5 10.7 5 15a7 7 0 0 0 7 7z"/>
                     </svg>
                   </button>
-                  <button className="w-12 h-12 md:w-14 md:h-14 bg-red-600 border border-transparent rounded-full flex items-center justify-center text-white cursor-pointer shadow-sm hover:scale-[1.03] active:scale-95 transition-all">
+                  <button className="w-12 h-12 md:w-14 md:h-14 bg-red-600 border border-transparent rounded-full flex items-center justify-center text-[#E3E3E1] cursor-pointer shadow-sm hover:scale-[1.03] active:scale-95 transition-all">
                     <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
                       <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                       <circle cx="12" cy="13" r="4"/>
-                      <line x1="1" y1="1" x2="23" y2="23" stroke="white" strokeWidth="2"/>
+                      <line x1="1" y1="1" x2="23" y2="23" stroke="#E3E3E1" strokeWidth="2"/>
                     </svg>
                   </button>
                 </div>
 
                 {/* Dot Matrix Activity Chart */}
-                <div className="md:col-span-2 bg-white dark:bg-white border border-neutral-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm min-h-[140px] text-neutral-900">
+                <div className="md:col-span-2 bg-[#E3E3E1] dark:bg-[#E3E3E1] border border-[#CFCFCF] rounded-2xl p-5 flex flex-col justify-between shadow-sm min-h-[140px] text-[#111111]">
                   {/* Dot Plot matrix */}
                   <div className="flex justify-between items-end h-20 px-2">
                     {/* Sun to Sat Column dot data */}
@@ -352,7 +352,7 @@ export default function Works() {
 
         {/* Header Grid */}
         <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-0 my-0 p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
-          <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase leading-none">
+          <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-[-0.04em] text-neutral-900 dark:text-neutral-100 uppercase leading-none">
             {work.title}
           </h1>
           <div className="flex flex-col gap-2 justify-center mt-6 lg:mt-0">
@@ -438,7 +438,7 @@ export default function Works() {
           variants={titleRevealVariants}
           initial="hidden"
           animate="visible"
-          className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase mb-4"
+          className="text-4xl md:text-5xl font-black tracking-[-0.04em] text-neutral-900 dark:text-neutral-100 uppercase mb-4"
         >
           Selected Works
         </motion.h1>

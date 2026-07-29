@@ -72,7 +72,7 @@ export default function Archive() {
           
           {/* Header block (pinned to top of Left Column) */}
           <motion.div variants={cardVariants} className="p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900 flex flex-col justify-center min-h-[35vh]">
-            <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase mb-4 leading-none">
+            <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-[-0.04em] text-neutral-900 dark:text-neutral-100 uppercase mb-4 leading-none">
               Archived works
             </h1>
             <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-md xl:max-w-xl mt-6">

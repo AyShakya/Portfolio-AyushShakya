@@ -19,7 +19,7 @@ export default function DotMatrixCloud() {
 
   return (
     <div 
-      className="w-32 h-32 md:w-36 md:h-36 bg-white dark:bg-white rounded-full border border-neutral-200 shadow-sm flex items-center justify-center p-5 cursor-pointer transition-transform duration-300 hover:scale-105"
+      className="w-32 h-32 md:w-36 md:h-36 bg-[#E3E3E1] dark:bg-[#E3E3E1] rounded-full border border-[#CFCFCF] shadow-sm flex items-center justify-center p-5 cursor-pointer transition-transform duration-300 hover:scale-105"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

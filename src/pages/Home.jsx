@@ -81,7 +81,7 @@ export default function Home() {
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-            className="text-[12.2vw] sm:text-[12.5vw] md:text-[12.7vw] lg:text-[12.8vw] font-black tracking-tighter leading-[0.9] select-none text-neutral-900 dark:text-neutral-100 font-sans w-full uppercase flex flex-nowrap whitespace-nowrap justify-center gap-x-[3vw] gap-y-0"
+            className="text-[12.2vw] sm:text-[12.5vw] md:text-[12.7vw] lg:text-[12.8vw] font-black tracking-[-0.04em] leading-[0.9] select-none text-[#E3E3E1] dark:text-[#E3E3E1] font-sans w-full uppercase flex flex-nowrap whitespace-nowrap justify-center gap-x-[3vw] gap-y-0"
           >
             <span>AYUSH</span>
             <span>SHAKYA</span>

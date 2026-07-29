@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=VT323&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&family=VT323&family=Share+Tech+Mono&display=swap');
 
 @import "tailwindcss";
 
@@ -6,15 +6,18 @@
 
 
 @theme {
-  --font-sans: 'Outfit', 'Inter', system-ui, sans-serif;
-  --font-mono: 'Share Tech Mono', monospace;
+  --font-sans: 'Inter', 'Helvetica Now Display', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
   --font-pixel: 'VT323', monospace;
   
-  --color-brand-bg-dark: #0a0a0a;
+  --color-brand-bg-dark: #111111;
   --color-brand-bg-light: #ffffff;
   --color-card-dark: #121212;
   --color-card-light: #f5f5f5;
   --color-accent-red: #ff3b30;
+  
+  --color-neutral-100: #E3E3E1;
+  --color-white: #E3E3E1;
   
   --color-neutral-250: #dadada;
   --color-neutral-350: #bcbcbc;
@@ -25,16 +28,16 @@
 
 /* Custom styles */
 body {
-  background-color: #0d0d0d;
-  color: #f3f4f6;
+  background-color: #111111;
+  color: #E3E3E1;
   font-family: var(--font-sans);
   overflow-x: hidden;
   transition: background-color 0.3s, color 0.3s;
 }
 
 body.light {
-  background-color: #f9f9f9;
-  color: #111827;
+  background-color: #ffffff;
+  color: #111111;
 }
 
 /* Hide scrollbar but keep functionality */

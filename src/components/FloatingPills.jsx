@@ -331,10 +331,10 @@ export default function FloatingPills() {
                 : 'px-8 py-3.5 md:px-10 md:py-4.5 rounded-full text-sm md:text-base'
             } ${
               pill.type === 'circle'
-                ? 'bg-neutral-100 dark:bg-neutral-100 text-neutral-900 border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.15)] font-bold'
+                ? 'bg-[#E3E3E1] dark:bg-[#E3E3E1] text-[#111111] dark:text-[#111111] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.15)] font-bold'
                 : pill.type === 'circle-arrow'
-                ? 'bg-neutral-100 dark:bg-neutral-100 text-neutral-900 border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.15)] font-sans'
-                : 'bg-transparent text-neutral-850 dark:text-neutral-200 border-neutral-300 dark:border-neutral-800 backdrop-blur-sm'
+                ? 'bg-[#E3E3E1] dark:bg-[#E3E3E1] text-[#111111] dark:text-[#111111] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.15)] font-sans'
+                : 'bg-transparent text-[#E3E3E1] dark:text-[#E3E3E1] border-[#CFCFCF]/50 dark:border-[#CFCFCF]/30 backdrop-blur-sm'
             }`}
           >
             {pill.text}

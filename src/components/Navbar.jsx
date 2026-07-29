@@ -41,12 +41,12 @@ export default function Navbar() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full px-[5vw] py-8 md:py-10 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-900 transition-colors duration-300 sticky top-0 z-50 bg-[#0d0d0d]/80 dark:bg-[#0d0d0d]/80 light:bg-[#f9f9f9]/80 backdrop-blur-md"
+      className="w-full px-[5vw] py-8 md:py-10 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-900 transition-colors duration-300 sticky top-0 z-50 bg-[#111111]/80 dark:bg-[#111111]/80 light:bg-white/80 backdrop-blur-md"
     >
       {/* Logo */}
       <Link 
         to="/" 
-        className="text-lg md:text-xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 font-sans hover:opacity-80 transition-opacity"
+        className="text-lg md:text-xl font-bold tracking-tight text-[#E3E3E1] dark:text-[#E3E3E1] font-sans hover:opacity-80 transition-opacity"
       >
         MARYA©
       </Link>
@@ -60,7 +60,7 @@ export default function Navbar() {
               key={link.path}
               to={link.path}
               className={`relative py-1 text-xs md:text-sm font-medium tracking-widest transition-colors duration-250 ${
-                active ? 'text-neutral-900 dark:text-neutral-100 font-semibold' : 'text-neutral-500 hover:text-neutral-950 dark:hover:text-neutral-250'
+                active ? 'text-[#E3E3E1] font-semibold' : 'text-neutral-500 hover:text-[#E3E3E1]'
               }`}
             >
               <motion.span
@@ -73,7 +73,7 @@ export default function Navbar() {
               {active && (
                 <motion.div
                   layoutId="active-indicator"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-500 dark:bg-neutral-100"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#E3E3E1] dark:bg-[#E3E3E1]"
                   transition={{ type: 'spring', stiffness: 320, damping: 24 }}
                 />
               )}
