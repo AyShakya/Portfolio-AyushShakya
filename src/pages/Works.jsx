@@ -5,6 +5,7 @@ import CompassWidget from '../components/CompassWidget';
 import ClockWidget from '../components/ClockWidget';
 import WeatherWidget from '../components/WeatherWidget';
 import ImagePlaceholder from '../components/ImagePlaceholder';
+import PhoneWidgetDashboard from '../components/PhoneWidgetDashboard';
 
 export default function Works() {
   const { projectId } = useParams();
@@ -46,7 +47,7 @@ export default function Works() {
     // Special detailed view for N1 widgets
     if (projectId === 'n1-widgets') {
       return (
-        <div className="w-full max-w-7xl mx-auto px-6 py-10 text-left transition-colors duration-300">
+        <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300">
           {/* Back to Home Link */}
           <Link 
             to="/" 
@@ -57,19 +58,19 @@ export default function Works() {
 
           {/* Header Grid */}
           <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-8 pb-10 border-b border-neutral-200/50 dark:border-neutral-900">
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase leading-none">
+            <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase leading-none">
               {work.title}
             </h1>
             <div className="flex flex-col gap-2">
               <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-450 dark:text-neutral-400">Overview</h4>
-              <p className="text-sm md:text-base leading-relaxed text-neutral-500 font-sans max-w-xl">
+              <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-xl xl:max-w-2xl">
                 {work.overview}
               </p>
             </div>
           </section>
 
-          {/* Row 1: Widget Display & Speaker Mockup Placeholder */}
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-10 items-stretch">
+          {/* Row 1: Widget Display & Phone Dashboard */}
+          <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
             {/* Left: Widgets container */}
             <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-wrap md:flex-nowrap items-center justify-center gap-6 shadow-sm overflow-hidden">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
@@ -81,17 +82,14 @@ export default function Works() {
               </div>
             </div>
 
-            {/* Right: Speaker device image placeholder */}
-            <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch">
-              <ImagePlaceholder 
-                description="White smartphone resting on black industrial speaker gear displaying dot matrix dashboard"
-                className="w-full h-full !min-h-[280px] !rounded-[32px]"
-              />
+            {/* Right: Phone Dashboard */}
+            <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch bg-neutral-100 dark:bg-neutral-900/30">
+              <PhoneWidgetDashboard />
             </div>
           </section>
 
           {/* Row 2: Metadata Columns & About Section */}
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 my-16 border-t border-neutral-200/50 dark:border-neutral-900 pt-12">
+          <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-16 xl:my-24 border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16">
             {/* Left Columns - Metadata */}
             <div className="lg:col-span-1 grid grid-cols-3 lg:grid-cols-1 gap-6">
               <div className="flex flex-col gap-1">
@@ -123,14 +121,11 @@ export default function Works() {
             </div>
           </section>
 
-          {/* Row 3: Turntable image & Additional widget card details */}
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-10 items-stretch">
-            {/* Left: Turntable Phone Mockup Placeholder */}
-            <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch">
-              <ImagePlaceholder 
-                description="Black smartphone on turntable vinyl platter showing dashboard stats"
-                className="w-full h-full !min-h-[300px] !rounded-[32px]"
-              />
+          {/* Row 3: Phone Dashboard & Additional widget card details */}
+          <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
+            {/* Left: Phone Dashboard */}
+            <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch bg-neutral-100 dark:bg-neutral-900/30">
+              <PhoneWidgetDashboard />
             </div>
 
             {/* Right: Detailed cards container */}
@@ -270,7 +265,7 @@ export default function Works() {
 
     // Default detailed view for other works (H23, Glod Water)
     return (
-      <div className="w-full max-w-7xl mx-auto px-6 py-10 text-left transition-colors duration-300">
+      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300">
         {/* Back Link */}
         <Link 
           to="/" 
@@ -281,19 +276,19 @@ export default function Works() {
 
         {/* Header Grid */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-8 pb-10 border-b border-neutral-200/50 dark:border-neutral-900">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase leading-none">
+          <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase leading-none">
             {work.title}
           </h1>
           <div className="flex flex-col gap-2">
             <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-400">Overview</h4>
-            <p className="text-sm md:text-base leading-relaxed text-neutral-500 font-sans max-w-xl">
+            <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-xl xl:max-w-2xl">
               {work.overview}
             </p>
           </div>
         </section>
 
         {/* Mockups Grid Placeholders */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-10 items-stretch">
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
           <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch">
             <ImagePlaceholder 
               description={`${work.placeholder} (Primary Perspective)`}
@@ -309,7 +304,7 @@ export default function Works() {
         </section>
 
         {/* Metadata Details */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 my-16 border-t border-neutral-200/50 dark:border-neutral-900 pt-12">
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-16 xl:my-24 border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16">
           {/* Metadata */}
           <div className="lg:col-span-1 grid grid-cols-3 lg:grid-cols-1 gap-6">
             <div className="flex flex-col gap-1">
@@ -357,7 +352,7 @@ export default function Works() {
 
   // 2. Default works list if no projectId parameter
   return (
-    <div className="w-full max-w-7xl mx-auto px-6 py-10 text-left transition-colors duration-300">
+    <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300">
       <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase mb-4">
         Selected Works
       </h1>
@@ -366,7 +361,7 @@ export default function Works() {
       </p>
 
       {/* Grid List */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 2xl:gap-16">
         
         {/* N1 Widgets */}
         <Link to="/works/n1-widgets" className="group block">
