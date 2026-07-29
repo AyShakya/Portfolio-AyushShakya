@@ -32,20 +32,20 @@ export default function Archive() {
   );
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-6 py-10 text-left transition-colors duration-300">
+    <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300">
       
       {/* Responsive layout: Stacks on mobile, split columns on desktop */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 2xl:gap-20">
         
         {/* Left Column on Desktop */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-10 xl:gap-16 2xl:gap-20">
           
           {/* Header block (pinned to top of Left Column) */}
           <div className="pb-10 border-b border-neutral-200/50 dark:border-neutral-900 pt-6">
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase mb-4 leading-none">
+            <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase mb-4 leading-none">
               Archived works
             </h1>
-            <p className="text-sm md:text-base leading-relaxed text-neutral-500 font-sans max-w-md mt-6">
+            <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-md xl:max-w-xl mt-6">
               Series of past experiments and client work i've done along the years
             </p>
           </div>
@@ -74,7 +74,7 @@ export default function Archive() {
         </div>
 
         {/* Right Column on Desktop */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-10 xl:gap-16 2xl:gap-20">
           
           {/* Right Column Archive Cards (First item Glod Water aligns with Header block) */}
           {rightColItems.map((item, idx) => (
