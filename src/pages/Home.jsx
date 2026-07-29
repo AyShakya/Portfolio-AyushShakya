@@ -54,6 +54,15 @@ export default function Home() {
     setData(portfolioData);
   }, []);
 
+  if (!data) {
+    return (
+      <div className="w-full min-h-[60vh] flex items-center justify-center font-mono text-sm text-neutral-500">
+        Loading portfolio specs...
+      </div>
+    );
+  }
+
+  const { bio, experiences, works } = data;
   const allWorks = [works.find(w => w.id === 'n1-widgets'), ...works.filter(w => w.id !== 'n1-widgets')].filter(Boolean);
 
   return (
