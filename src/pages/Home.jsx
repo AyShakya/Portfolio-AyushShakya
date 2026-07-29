@@ -8,6 +8,7 @@ import CompassWidget from '../components/CompassWidget';
 import ClockWidget from '../components/ClockWidget';
 import WeatherWidget from '../components/WeatherWidget';
 import ImagePlaceholder from '../components/ImagePlaceholder';
+import PhoneWidgetDashboard from '../components/PhoneWidgetDashboard';
 
 export default function Home() {
   const [data, setData] = useState(null);
@@ -29,7 +30,7 @@ export default function Home() {
   const { bio, experiences, works } = data;
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-6 py-6 md:py-10 transition-colors duration-300">
+    <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-6 md:py-10 transition-colors duration-300">
       
       {/* HERO SECTION */}
       <section className="relative flex flex-col items-center justify-between min-h-[45vh] pt-6 pb-8">
@@ -45,7 +46,7 @@ export default function Home() {
       </section>
 
       {/* INTERACTIVE COMPONENT GRID */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-10 items-stretch">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 xl:gap-10 my-10 xl:my-16 items-stretch">
         
         {/* Left Card: Light Gray Container with Interactive Panels */}
         <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 flex items-center justify-center border border-neutral-200/50 dark:border-neutral-900 transition-colors">
@@ -84,37 +85,34 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Right Card: Turntable Mockup & Phone Dashboard Placeholder */}
-        <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch">
-          <ImagePlaceholder 
-            description="Black turntable vinyl player platter with smartphone lying on top displaying activity widgets"
-            className="w-full h-full !min-h-[250px] !rounded-[32px]"
-          />
+        {/* Right Card: Turntable Mockup & Phone Dashboard */}
+        <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch bg-neutral-100 dark:bg-neutral-900/30">
+          <PhoneWidgetDashboard />
         </div>
 
       </section>
 
       {/* BIO SECTION */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 my-16 md:my-24 text-left border-t border-neutral-200/50 dark:border-neutral-900 pt-12">
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 xl:gap-12 my-16 md:my-24 xl:my-32 text-left border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16">
+        <h2 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 leading-tight">
           {bio.tagline}
         </h2>
-        <p className="text-sm md:text-base leading-relaxed text-neutral-500 font-sans max-w-xl">
+        <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-xl xl:max-w-2xl">
           {bio.description}
         </p>
       </section>
 
       {/* SELECTED WORKS SECTION */}
-      <section className="my-16 text-left">
+      <section className="my-16 xl:my-24 text-left">
         <div className="flex items-baseline justify-between mb-8 md:mb-12">
-          <h2 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-neutral-100 tracking-tight">
+          <h2 className="text-xl md:text-2xl xl:text-3xl font-bold text-neutral-900 dark:text-neutral-100 tracking-tight">
             Selected Works
           </h2>
-          <span className="text-xs font-mono text-neutral-500">2021 - 2024</span>
+          <span className="text-xs font-mono text-neutral-550">2021 - 2024</span>
         </div>
 
         {/* Works Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 2xl:gap-16">
           
           {/* Card 1: N1 Widgets (Interactive widgets) */}
           <Link to="/works/n1-widgets" className="group block">
@@ -163,7 +161,7 @@ export default function Home() {
       </section>
 
       {/* EXPERIENCES & PLAYGROUND SECTION */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 my-20 border-t border-neutral-200/50 dark:border-neutral-900 pt-16 text-left">
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-20 xl:my-32 border-t border-neutral-200/50 dark:border-neutral-900 pt-16 xl:pt-20 text-left">
         
         {/* Left Column: Playground Link */}
         <div className="lg:col-span-1 flex flex-col justify-between gap-4">
@@ -179,7 +177,7 @@ export default function Home() {
         {/* Right Columns: Description & Experiences Timeline */}
         <div className="lg:col-span-2 flex flex-col gap-10">
           {/* Repeated bio description as seen in screenshots */}
-          <p className="text-sm md:text-base leading-relaxed text-neutral-500 font-sans max-w-2xl">
+          <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-2xl xl:max-w-3xl">
             {bio.description}
           </p>
 
