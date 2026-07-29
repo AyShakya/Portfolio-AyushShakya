@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 export default function Footer() {
   const [timeStr, setTimeStr] = useState('');
@@ -27,49 +28,61 @@ export default function Footer() {
         {/* Left Column - Contact Info */}
         <div className="flex flex-col gap-2">
           <p className="text-xs uppercase tracking-widest text-neutral-500">Interested to work with me?</p>
-          <a 
-            href="mailto:INFO@AKIO.DESIGN" 
-            className="text-lg md:text-xl font-bold font-sans tracking-tight text-neutral-900 dark:text-neutral-100 hover:underline hover:opacity-80 transition-all"
-          >
-            INFO@AKIO.DESIGN
-          </a>
+          <div>
+            <motion.a 
+              href="mailto:INFO@AKIO.DESIGN" 
+              whileHover={{ y: -3 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="text-lg md:text-xl font-bold font-sans tracking-tight text-neutral-900 dark:text-neutral-100 hover:underline hover:opacity-80 transition-all inline-block"
+            >
+              INFO@AKIO.DESIGN
+            </motion.a>
+          </div>
         </div>
 
         {/* Center Column - Socials */}
         <div className="flex flex-col gap-1 md:items-center">
-          <div className="flex flex-col gap-1 md:text-center text-left">
-            <a 
+          <div className="flex flex-col gap-1.5 md:text-center text-left items-start md:items-center">
+            <motion.a 
               href="https://instagram.com" 
               target="_blank" 
               rel="noreferrer" 
-              className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-block"
             >
               Instagram
-            </a>
-            <a 
+            </motion.a>
+            <motion.a 
               href="https://behance.net" 
               target="_blank" 
               rel="noreferrer" 
-              className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-block"
             >
               Behance
-            </a>
-            <a 
+            </motion.a>
+            <motion.a 
               href="https://twitter.com" 
               target="_blank" 
               rel="noreferrer" 
-              className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-block"
             >
               Twitter
-            </a>
-            <a 
+            </motion.a>
+            <motion.a 
               href="https://dribbble.com" 
               target="_blank" 
               rel="noreferrer" 
-              className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-block"
             >
               Dribbble
-            </a>
+            </motion.a>
           </div>
         </div>
 
