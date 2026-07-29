@@ -27,7 +27,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="w-full max-w-7xl mx-auto px-6 py-8 md:py-10 flex items-center justify-between border-b border-neutral-800 dark:border-neutral-900 transition-colors duration-300">
+    <header className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-8 md:py-10 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-900 transition-colors duration-300">
       {/* Logo */}
       <Link 
         to="/" 

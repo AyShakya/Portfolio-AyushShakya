@@ -22,7 +22,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="w-full max-w-7xl mx-auto px-6 py-12 md:py-16 mt-auto border-t border-neutral-800 dark:border-neutral-900 transition-colors duration-300">
+    <footer className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-12 md:py-16 mt-auto border-t border-neutral-200 dark:border-neutral-900 transition-colors duration-300">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 items-start text-left">
         {/* Left Column - Contact Info */}
         <div className="flex flex-col gap-2">
