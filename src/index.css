@@ -2,6 +2,9 @@
 
 @import "tailwindcss";
 
+@variant light (.light &);
+
+
 @theme {
   --font-sans: 'Outfit', 'Inter', system-ui, sans-serif;
   --font-mono: 'Share Tech Mono', monospace;
