@@ -58,7 +58,7 @@ export default function PhoneWidgetDashboard() {
 
   return (
     <div 
-      className="relative w-full aspect-[4/3] rounded-3xl bg-neutral-900/10 dark:bg-[#111112] light:bg-[#eaeaea] p-4 flex items-center justify-center overflow-hidden border border-neutral-800/10 light:border-neutral-200 shadow-inner group"
+      className="relative w-full aspect-[4/3] bg-neutral-900/10 dark:bg-[#111112] light:bg-[#eaeaea] p-4 flex items-center justify-center overflow-hidden border border-neutral-800/10 light:border-neutral-200 shadow-inner group @container"
       onClick={handlePhoneClick}
     >
       {/* Vinyl record/turntable blueprint-styled background to represent the record player photo */}
@@ -73,7 +73,12 @@ export default function PhoneWidgetDashboard() {
       </div>
 
       {/* The Phone Mockup */}
-      <div className="relative w-[280px] h-[520px] md:w-[300px] md:h-[550px] bg-black rounded-[42px] p-3 shadow-2xl border-[6px] border-neutral-800 scale-90 md:scale-95 transition-transform duration-500 group-hover:scale-100 group-hover:-rotate-1">
+      <div 
+        className="relative w-[300px] h-[550px] bg-black rounded-[42px] p-3 shadow-2xl border-[6px] border-neutral-800 transition-all duration-500 group-hover:-rotate-1 origin-center"
+        style={{
+          transform: 'scale(min(0.95, calc(65cqw / 550)))'
+        }}
+      >
         {/* Screen Bezel */}
         <div className="w-full h-full bg-[#050505] rounded-[36px] overflow-y-auto no-scrollbar p-3 pt-6 flex flex-col gap-3 relative border border-neutral-900 text-white">
           

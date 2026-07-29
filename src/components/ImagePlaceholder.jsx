@@ -1,10 +1,10 @@
 import React from 'react';
 
-export default function ImagePlaceholder({ description, className = '' }) {
+export default function ImagePlaceholder({ description, className = '', style = {} }) {
   return (
     <div 
-      className={`relative bg-neutral-900/60 dark:bg-neutral-900/40 border border-dashed border-neutral-800 dark:border-neutral-800 rounded-2xl flex flex-col items-center justify-center p-6 text-center select-none overflow-hidden transition-all duration-300 group-hover:border-neutral-700 ${className}`}
-      style={{ minHeight: '200px' }}
+      className={`relative @container bg-neutral-900/60 dark:bg-neutral-900/40 border border-dashed border-neutral-800 dark:border-neutral-800 rounded-2xl flex flex-col items-center justify-center p-[6cqw] text-center select-none overflow-hidden transition-all duration-300 group-hover:border-neutral-700 ${className}`}
+      style={{ minHeight: '200px', ...style }}
     >
       {/* Background blueprint grid pattern */}
       <div 
@@ -19,14 +19,14 @@ export default function ImagePlaceholder({ description, className = '' }) {
       ></div>
 
       {/* Placeholder content info */}
-      <div className="relative z-10 flex flex-col items-center gap-3 max-w-sm">
+      <div className="relative z-10 flex flex-col items-center gap-[3cqw] max-w-[85%]">
         {/* Aesthetic label badge */}
-        <span className="px-2.5 py-1 rounded bg-neutral-800/80 text-[10px] font-mono tracking-widest text-neutral-400 border border-neutral-700/50 uppercase">
+        <span className="px-[2.5cqw] py-[1cqw] rounded bg-neutral-800/80 text-[clamp(8px,3cqw,11px)] font-mono tracking-widest text-neutral-400 border border-neutral-700/50 uppercase leading-none">
           Image Placeholder
         </span>
         
         {/* Description text */}
-        <p className="text-xs font-mono leading-relaxed text-neutral-500 max-w-[280px]">
+        <p className="text-[clamp(9px,3.5cqw,13px)] font-mono leading-relaxed text-neutral-500 max-w-full">
           {description || "Visual asset content details"}
         </p>
       </div>
