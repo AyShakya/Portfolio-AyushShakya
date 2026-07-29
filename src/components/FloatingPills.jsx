@@ -325,16 +325,16 @@ export default function FloatingPills() {
             }}
             onPointerDown={(e) => handlePointerDown(e, idx)}
             whileHover={{ scale: 1.04 }}
-            className={`absolute left-0 top-0 cursor-grab active:cursor-grabbing select-none font-mono tracking-widest border transition-colors duration-300 ${
+            className={`absolute left-0 top-0 cursor-grab active:cursor-grabbing select-none font-mono tracking-[0.12em] border transition-colors duration-300 ${
               isCircle 
                 ? 'w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl md:text-3xl font-sans' 
                 : 'px-8 py-3.5 md:px-10 md:py-4.5 rounded-full text-sm md:text-base'
             } ${
               pill.type === 'circle'
-                ? 'bg-[#E3E3E1] dark:bg-[#E3E3E1] text-[#111111] dark:text-[#111111] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.15)] font-bold'
+                ? 'bg-[#eaeaea] dark:bg-[#eaeaea] text-[#0d0d0e] dark:text-[#0d0d0e] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.15)] font-bold'
                 : pill.type === 'circle-arrow'
-                ? 'bg-[#E3E3E1] dark:bg-[#E3E3E1] text-[#111111] dark:text-[#111111] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.15)] font-sans'
-                : 'bg-transparent text-[#E3E3E1] dark:text-[#E3E3E1] border-[#CFCFCF]/50 dark:border-[#CFCFCF]/30 backdrop-blur-sm'
+                ? 'bg-[#eaeaea] dark:bg-[#eaeaea] text-[#0d0d0e] dark:text-[#0d0d0e] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.15)] font-sans'
+                : 'bg-transparent text-[#eaeaea] dark:text-[#eaeaea] border-[#eaeaea]/25 dark:border-[#eaeaea]/25 backdrop-blur-sm'
             }`}
           >
             {pill.text}

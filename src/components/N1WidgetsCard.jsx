@@ -93,16 +93,16 @@ export default function N1WidgetsCard() {
           >
             {/* Arrow made of dots */}
             <div className="flex flex-col items-center justify-center gap-[3px]">
-              <div className="w-[3px] h-[3px] rounded-full bg-[#E3E3E1]"></div>
+              <div className="w-[3px] h-[3px] rounded-full bg-[#eaeaea]"></div>
               <div className="flex gap-[3px]">
-                <div className="w-[3px] h-[3px] rounded-full bg-[#E3E3E1]/60"></div>
-                <div className="w-[3px] h-[3px] rounded-full bg-[#E3E3E1]"></div>
-                <div className="w-[3px] h-[3px] rounded-full bg-[#E3E3E1]/60"></div>
+                <div className="w-[3px] h-[3px] rounded-full bg-[#eaeaea]/60"></div>
+                <div className="w-[3px] h-[3px] rounded-full bg-[#eaeaea]"></div>
+                <div className="w-[3px] h-[3px] rounded-full bg-[#eaeaea]/60"></div>
               </div>
-              <div className="w-[3px] h-[3px] rounded-full bg-[#E3E3E1]/80"></div>
-              <div className="w-[3px] h-[3px] rounded-full bg-[#E3E3E1]/60"></div>
-              <div className="w-[3px] h-[3px] rounded-full bg-[#E3E3E1]/40"></div>
-              <div className="w-[3px] h-[3px] rounded-full bg-[#E3E3E1]/20"></div>
+              <div className="w-[3px] h-[3px] rounded-full bg-[#eaeaea]/80"></div>
+              <div className="w-[3px] h-[3px] rounded-full bg-[#eaeaea]/60"></div>
+              <div className="w-[3px] h-[3px] rounded-full bg-[#eaeaea]/40"></div>
+              <div className="w-[3px] h-[3px] rounded-full bg-[#eaeaea]/20"></div>
             </div>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function N1WidgetsCard() {
           <div className="relative w-20 h-20">
             {/* Hour hand */}
             <div 
-              className="absolute top-10 left-10 w-1.5 h-6 bg-[#E3E3E1] origin-bottom rounded-full -translate-x-[3px] -translate-y-6"
+              className="absolute top-10 left-10 w-1.5 h-6 bg-[#eaeaea] origin-bottom rounded-full -translate-x-[3px] -translate-y-6"
               style={{ transform: `rotate(${hourAngle}deg)` }}
             ></div>
             {/* Minute hand */}
@@ -130,13 +130,13 @@ export default function N1WidgetsCard() {
               style={{ transform: `rotate(${secondAngle}deg)` }}
             ></div>
             {/* Center Pin */}
-            <div className="absolute top-10 left-10 w-2.5 h-2.5 rounded-full bg-[#E3E3E1] border border-neutral-800 -translate-x-[5px] -translate-y-[5px]"></div>
+            <div className="absolute top-10 left-10 w-2.5 h-2.5 rounded-full bg-[#eaeaea] border border-neutral-800 -translate-x-[5px] -translate-y-[5px]"></div>
           </div>
         </div>
       </div>
 
       {/* Weather Widget */}
-      <div className="w-full rounded-2xl bg-[#121212] p-5 md:p-6 flex flex-col justify-between border border-neutral-800/40 text-[#E3E3E1]">
+      <div className="w-full rounded-2xl bg-[#121212] p-5 md:p-6 flex flex-col justify-between border border-neutral-800/40 text-[#eaeaea]">
         {/* Top Info */}
         <div className="flex justify-between items-start mb-6">
           <div className="flex gap-4 items-center">

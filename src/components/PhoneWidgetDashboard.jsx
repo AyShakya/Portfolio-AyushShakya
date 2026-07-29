@@ -124,10 +124,10 @@ export default function PhoneWidgetDashboard() {
           {/* Steps & Total Time Widget Row */}
           <div className="grid grid-cols-2 gap-2.5">
             {/* Steps (White Card) */}
-            <div className="rounded-2xl bg-[#E3E3E1] text-[#111111] p-3.5 flex flex-col justify-between h-[110px]">
+            <div className="rounded-2xl bg-[#eaeaea] text-[#0d0d0e] p-3.5 flex flex-col justify-between h-[110px]">
               <div>
                 <span className="text-[9px] font-bold text-neutral-500 tracking-wider block leading-none font-mono">TOTAL STEPS</span>
-                <span className="font-pixel text-2xl font-bold tracking-tight block mt-2 text-[#111111]">{steps.toLocaleString()}</span>
+                <span className="font-pixel text-2xl font-bold tracking-tight block mt-2 text-[#0d0d0e]">{steps.toLocaleString()}</span>
               </div>
               <div>
                 <span className="text-[8px] font-bold text-neutral-400 tracking-wider block font-mono">STREAK</span>
@@ -210,9 +210,9 @@ export default function PhoneWidgetDashboard() {
                   className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center hover:bg-neutral-700 transition-colors focus:outline-none"
                 >
                   {isPlaying ? (
-                    <Pause size={10} className="fill-[#E3E3E1] text-[#E3E3E1]" />
+                    <Pause size={10} className="fill-[#eaeaea] text-[#eaeaea]" />
                   ) : (
-                    <Play size={10} className="fill-[#E3E3E1] text-[#E3E3E1] ml-0.5" />
+                    <Play size={10} className="fill-[#eaeaea] text-[#eaeaea] ml-0.5" />
                   )}
                 </button>
 
@@ -221,7 +221,7 @@ export default function PhoneWidgetDashboard() {
                   {barHeights.map((height, i) => (
                     <div 
                       key={i} 
-                      className="w-[2.5px] rounded-t-xs bg-[#E3E3E1] transition-all duration-150"
+                      className="w-[2.5px] rounded-t-xs bg-[#eaeaea] transition-all duration-150"
                       style={{ height: `${height}%` }}
                     ></div>
                   ))}

@@ -11,8 +11,8 @@ export default function ImagePlaceholder({ description, className = '', style = 
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage: `
-            linear-gradient(to right, #E3E3E1 1px, transparent 1px),
-            linear-gradient(to bottom, #E3E3E1 1px, transparent 1px)
+            linear-gradient(to right, #eaeaea 1px, transparent 1px),
+            linear-gradient(to bottom, #eaeaea 1px, transparent 1px)
           `,
           backgroundSize: '20px 20px'
         }}
