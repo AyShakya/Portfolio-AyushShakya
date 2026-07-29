@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { loadPortfolioData } from '../utils/contentLoader';
 import FloatingPills from '../components/FloatingPills';
 import DotMatrixFace from '../components/DotMatrixFace';
@@ -9,6 +10,40 @@ import ClockWidget from '../components/ClockWidget';
 import WeatherWidget from '../components/WeatherWidget';
 import ImagePlaceholder from '../components/ImagePlaceholder';
 import PhoneWidgetDashboard from '../components/PhoneWidgetDashboard';
+
+// Variants for Scroll Entrance Animations
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12 // 120ms Card Stagger
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7, // 700ms Entrance
+      ease: [0.16, 1, 0.3, 1] // Primary Easing
+    }
+  }
+};
+
+const scrollRevealVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  }
+};
 
 export default function Home() {
   const [data, setData] = useState(null);
@@ -39,14 +74,27 @@ export default function Home() {
           <FloatingPills />
         </div>
 
-        {/* Big Hero Title */}
-        <h1 className="text-[11vw] font-black tracking-tighter leading-none select-none text-neutral-900 dark:text-neutral-100 font-sans w-full text-center mt-6 uppercase">
-          AKIO HIROSHI
-        </h1>
+        {/* Big Hero Title with Masked Reveal */}
+        <div className="overflow-hidden w-full text-center mt-6">
+          <motion.h1 
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+            className="text-[11vw] font-black tracking-tighter leading-none select-none text-neutral-900 dark:text-neutral-100 font-sans w-full uppercase"
+          >
+            AKIO HIROSHI
+          </motion.h1>
+        </div>
       </section>
 
       {/* INTERACTIVE COMPONENT GRID */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 xl:gap-10 my-10 xl:my-16 items-stretch">
+      <motion.section 
+        variants={scrollRevealVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-15% 0px" }}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6 xl:gap-10 my-10 xl:my-16 items-stretch"
+      >
         
         {/* Left Card: Light Gray Container with Interactive Panels */}
         <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 flex items-center justify-center border border-neutral-200/50 dark:border-neutral-900 transition-colors">
@@ -70,10 +118,10 @@ export default function Home() {
             </div>
 
             {/* Column 3: Portrait Slat Placeholder */}
-            <div className="w-full flex justify-center group">
+            <div className="w-full flex justify-center group/slat">
               <ImagePlaceholder 
                 description="Clean monochromatic slit profile photo card with Spotify logo overlay" 
-                className="w-32 h-32 md:w-36 md:h-36 rounded-3xl !p-2 !min-h-0"
+                className="w-32 h-32 md:w-36 md:h-36 rounded-3xl !p-2 !min-h-0 transition-transform duration-300 group-hover/slat:scale-[1.04]"
               />
             </div>
 
@@ -90,86 +138,119 @@ export default function Home() {
           <PhoneWidgetDashboard />
         </div>
 
-      </section>
+      </motion.section>
 
-      {/* BIO SECTION */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 xl:gap-12 my-16 md:my-24 xl:my-32 text-left border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16">
+      {/* BIO SECTION - Fades in at 1100ms */}
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-8 xl:gap-12 my-16 md:my-24 xl:my-32 text-left border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16"
+      >
         <h2 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 leading-tight">
           {bio.tagline}
         </h2>
         <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-xl xl:max-w-2xl">
           {bio.description}
         </p>
-      </section>
+      </motion.section>
 
       {/* SELECTED WORKS SECTION */}
       <section className="my-16 xl:my-24 text-left">
-        <div className="flex items-baseline justify-between mb-8 md:mb-12">
+        <motion.div 
+          variants={scrollRevealVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-15% 0px" }}
+          className="flex items-baseline justify-between mb-8 md:mb-12"
+        >
           <h2 className="text-xl md:text-2xl xl:text-3xl font-bold text-neutral-900 dark:text-neutral-100 tracking-tight">
             Selected Works
           </h2>
-          <span className="text-xs font-mono text-neutral-550">2021 - 2024</span>
-        </div>
+          <span className="text-xs font-mono text-neutral-500">2021 - 2024</span>
+        </motion.div>
 
-        {/* Works Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 2xl:gap-16">
+        {/* Works Grid with Staggered Entrance */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-15% 0px" }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 2xl:gap-16"
+        >
           
           {/* Card 1: N1 Widgets (Interactive widgets) */}
-          <Link to="/works/n1-widgets" className="group block">
-            <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-col md:flex-row items-center justify-center gap-6 shadow-sm overflow-hidden transition-all duration-300 hover:border-neutral-350 dark:hover:border-neutral-800 aspect-video">
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-                <CompassWidget />
-                <ClockWidget />
-              </div>
-              <div className="flex items-center justify-center">
-                <WeatherWidget />
-              </div>
-            </div>
-            <div className="flex justify-between items-start mt-4">
-              <div>
-                <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline">
-                  N1 widgets
-                </h3>
-                <p className="text-xs text-neutral-500 mt-1">Branding UI/UX</p>
-              </div>
-              <span className="text-xs font-mono text-neutral-500">2024</span>
-            </div>
-          </Link>
-
-          {/* Loop over remaining works dynamically */}
-          {works.filter(w => w.id !== 'n1-widgets').map((work, idx) => (
-            <Link key={work.id} to={`/works/${work.id}`} className="group block">
-              <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
-                <ImagePlaceholder 
-                  description={work.placeholder} 
-                  className="w-full h-full !min-h-0 !rounded-[32px]"
-                />
+          <motion.div variants={cardVariants} className="group">
+            <Link to="/works/n1-widgets" className="block">
+              <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-col md:flex-row items-center justify-center gap-6 shadow-sm overflow-hidden transition-all duration-300 hover:border-neutral-350 dark:hover:border-neutral-800 aspect-video">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full transition-transform duration-300 group-hover:scale-[1.04]">
+                  <CompassWidget />
+                  <ClockWidget />
+                </div>
+                <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.04]">
+                  <WeatherWidget />
+                </div>
               </div>
               <div className="flex justify-between items-start mt-4">
                 <div>
-                  <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline">
-                    {work.title}
+                  <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
+                    N1 widgets
                   </h3>
-                  <p className="text-xs text-neutral-500 mt-1">{work.category}</p>
+                  <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">Branding UI/UX</p>
                 </div>
-                <span className="text-xs font-mono text-neutral-500">{work.year}</span>
+                <span className="text-xs font-mono text-neutral-500">2024</span>
               </div>
             </Link>
+          </motion.div>
+
+          {/* Loop over remaining works dynamically */}
+          {works.filter(w => w.id !== 'n1-widgets').map((work) => (
+            <motion.div key={work.id} variants={cardVariants} className="group">
+              <Link to={`/works/${work.id}`} className="block">
+                <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
+                  <ImagePlaceholder 
+                    description={work.placeholder} 
+                    className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                  />
+                </div>
+                <div className="flex justify-between items-start mt-4">
+                  <div>
+                    <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
+                      {work.title}
+                    </h3>
+                    <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">{work.category}</p>
+                  </div>
+                  <span className="text-xs font-mono text-neutral-500">{work.year}</span>
+                </div>
+              </Link>
+            </motion.div>
           ))}
 
-        </div>
+        </motion.div>
       </section>
 
       {/* EXPERIENCES & PLAYGROUND SECTION */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-20 xl:my-32 border-t border-neutral-200/50 dark:border-neutral-900 pt-16 xl:pt-20 text-left">
+      <motion.section 
+        variants={scrollRevealVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-15% 0px" }}
+        className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-20 xl:my-32 border-t border-neutral-200/50 dark:border-neutral-900 pt-16 xl:pt-20 text-left"
+      >
         
         {/* Left Column: Playground Link */}
         <div className="lg:col-span-1 flex flex-col justify-between gap-4">
           <Link 
             to="/archive" 
-            className="text-lg md:text-xl font-medium underline text-neutral-900 dark:text-neutral-100 hover:opacity-80 transition-opacity"
+            className="text-lg md:text-xl font-medium underline text-neutral-900 dark:text-neutral-100 hover:opacity-80 transition-opacity inline-block"
           >
-            See playground
+            <motion.span
+              className="block"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            >
+              See playground
+            </motion.span>
           </Link>
           <div className="hidden lg:block"></div>
         </div>
@@ -199,7 +280,7 @@ export default function Home() {
           </div>
         </div>
 
-      </section>
+      </motion.section>
 
     </div>
   );
