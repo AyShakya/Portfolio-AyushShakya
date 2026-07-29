@@ -76,14 +76,15 @@ export default function Home() {
         </div>
 
         {/* Big Hero Title with Masked Reveal */}
-        <div className="overflow-hidden w-full text-center mt-6">
+        <div className="overflow-hidden w-full text-center mt-6 px-[4vw] md:px-[6vw]">
           <motion.h1 
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-            className="text-[8.2vw] font-black tracking-tighter leading-none select-none text-neutral-900 dark:text-neutral-100 font-sans w-full uppercase block text-center"
+            className="text-[clamp(2.5rem,13vw,16rem)] font-black tracking-tighter leading-[0.9] select-none text-neutral-900 dark:text-neutral-100 font-sans w-full uppercase flex flex-wrap justify-center gap-x-[4vw] gap-y-[1vw]"
           >
-            AKIO HIROSHI
+            <span>AYUSH</span>
+            <span>SHAKYA</span>
           </motion.h1>
         </div>
       </section>

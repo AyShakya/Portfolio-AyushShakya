@@ -1,6 +1,6 @@
 ---
-name: "Akio Hiroshi"
-tagline: "Hi, I'm Akio, a japanse brand designer that loves to experiment"
+name: "Ayush Shakya"
+tagline: "Hi, I'm Ayush, a software developer that loves to experiment"
 description: "Product designer, specializing in crafting user-friendly products and brands with expertise in 3D Rendering, Motion Design, Product design, Prototyping and Front-end"
 email: "INFO@AKIO.DESIGN"
 instagram: "https://instagram.com"
