@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 
 export default function FloatingPills() {
   const containerRef = useRef(null);
-  const [randomizedPills, setRandomizedPills] = useState([]);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
-  useEffect(() => {
-    // Base setup for components (rebranded AKIO -> AYUSH)
+  // Initialize randomized values once on mount to ensure stability
+  const [randomizedPills] = useState(() => {
     const basePills = [
       { text: 'BRAND DESIGNER', type: 'oval' },
       { text: 'KIX \u25CF', type: 'kix' },
@@ -16,40 +16,98 @@ export default function FloatingPills() {
       { text: 'AYUSH', type: 'oval-small' }
     ];
 
-    const generated = basePills.map((pill, idx) => {
-      // Spread pills horizontally across columns so they don't overlap completely
+    return basePills.map((pill, idx) => {
+      // Divide container width horizontally
       const segmentWidth = 85 / basePills.length;
       const minX = 3 + idx * segmentWidth;
       const maxX = minX + segmentWidth;
       const xPercent = minX + Math.random() * (maxX - minX);
 
-      // Resting gravity boundary is at the bottom of the container (just above the name)
-      // Standardize height: Circles/ovals sit at the bottom 72% to 83% range
+      // Resting position (bottom range: 70% to 83% height)
       const yPercent = 70 + Math.random() * 12;
 
-      // Drop starting point from above the screen container (-350px to -150px)
-      const startY = -250 - Math.random() * 200;
+      // Drop entry position offsets: drop diagonally with random starting point
+      const startY = -400 - Math.random() * 250;
+      const startX = -120 + Math.random() * 240;
 
       // Settle rotations
-      const startRotate = -120 + Math.random() * 240;
+      const startRotate = -180 + Math.random() * 360;
       const endRotate = -15 + Math.random() * 30;
 
-      // Sequential delay
-      const delay = idx * 0.12 + Math.random() * 0.1;
+      // Drop delays
+      const delay = idx * 0.12 + Math.random() * 0.12;
 
       return {
         ...pill,
-        x: `${xPercent}%`,
-        y: `${yPercent}%`,
+        xPercent,
+        yPercent,
+        startX,
         startY,
         startRotate,
         endRotate,
         delay
       };
     });
+  });
 
-    setRandomizedPills(generated);
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const updateSize = () => {
+      if (containerRef.current) {
+        setContainerSize({
+          width: containerRef.current.offsetWidth,
+          height: containerRef.current.offsetHeight
+        });
+      }
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    
+    // Run observer for precise measurements
+    const resizeObserver = new ResizeObserver(updateSize);
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      resizeObserver.disconnect();
+    };
   }, []);
+
+  const getConstraints = (pill) => {
+    if (containerSize.width === 0 || containerSize.height === 0) return { top: 0, left: 0, right: 0, bottom: 0 };
+
+    const isMobile = containerSize.width < 768;
+    const isCircle = pill.type === 'circle' || pill.type === 'circle-arrow';
+    
+    let pillW = 150;
+    let pillH = 50;
+
+    if (isCircle) {
+      pillW = isMobile ? 64 : 80;
+      pillH = isMobile ? 64 : 80;
+    } else {
+      if (pill.type === 'oval-small') {
+        pillW = isMobile ? 100 : 120;
+      } else if (pill.text.length > 12) {
+        pillW = isMobile ? 180 : 220;
+      } else {
+        pillW = isMobile ? 120 : 150;
+      }
+      pillH = isMobile ? 48 : 56;
+    }
+
+    const restingX = (pill.xPercent / 100) * containerSize.width;
+    const restingY = (pill.yPercent / 100) * containerSize.height;
+
+    return {
+      left: -restingX + 10,
+      right: containerSize.width - restingX - pillW - 10,
+      top: -restingY + 10,
+      bottom: containerSize.height - restingY - pillH - 10
+    };
+  };
 
   return (
     <div 
@@ -58,24 +116,27 @@ export default function FloatingPills() {
     >
       {randomizedPills.map((pill, idx) => {
         const isCircle = pill.type === 'circle' || pill.type === 'circle-arrow';
-        
+        const constraints = getConstraints(pill);
+
         return (
           <motion.div
             key={idx}
             drag
-            dragConstraints={containerRef}
-            dragElastic={0.4}
-            dragTransition={{ power: 0.15, bounceStiffness: 120, bounceDamping: 12 }}
-            whileDrag={{ scale: 1.1, cursor: 'grabbing', zIndex: 50 }}
+            dragConstraints={constraints}
+            dragElastic={0.45}
+            dragTransition={{ power: 0.12, bounceStiffness: 220, bounceDamping: 10 }}
+            whileDrag={{ scale: 1.08, cursor: 'grabbing', zIndex: 50 }}
             initial={{ 
-              left: pill.x,
-              top: pill.y,
+              left: `${pill.xPercent}%`,
+              top: `${pill.yPercent}%`,
+              x: pill.startX,
               y: pill.startY,
               rotate: pill.startRotate,
               scale: 0.9,
               opacity: 0
             }}
             animate={{ 
+              x: 0,
               y: 0,
               rotate: pill.endRotate,
               scale: 1,
@@ -88,7 +149,7 @@ export default function FloatingPills() {
               mass: 1.1,
               delay: pill.delay
             }}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.04 }}
             className={`absolute cursor-grab select-none font-mono tracking-widest border transition-colors duration-300 ${
               isCircle 
                 ? 'w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl md:text-3xl font-sans' 
