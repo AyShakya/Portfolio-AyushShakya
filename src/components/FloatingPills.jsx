@@ -119,59 +119,50 @@ export default function FloatingPills() {
 
           pill.x += pill.vx;
           pill.y += pill.vy;
-
-          // 2. Boundary Collisions (bouncing with slide correction)
-          const bounce = 0.55;
-          const pad = 10;
-
-          // Left Boundary
-          if (pill.x < pad) {
-            pill.x = pad;
-            pill.vx = -pill.vx * bounce;
-          }
-          // Right Boundary
-          if (pill.x > w - pill.width - pad) {
-            pill.x = w - pill.width - pad;
-            pill.vx = -pill.vx * bounce;
-          }
-          // Top Boundary
-          if (pill.y < pad) {
-            pill.y = pad;
-            pill.vy = -pill.vy * bounce;
-          }
-          // Bottom Boundary (landing above title name)
-          if (pill.y > h - pill.height - pad) {
-            pill.y = h - pill.height - pad;
-            pill.vy = -pill.vy * 0.45; // settle quicker
-            pill.vx *= 0.93; // ground friction
-          }
         });
 
-        // 3. Resolve Pill-to-Pill Rigid Body Collisions
-        // Run loop 3 times per frame to prevent overlap intersections
-        for (let pass = 0; pass < 3; pass++) {
+        // 2. Resolve Pill-to-Pill Box Collisions & Enforce strict boundary walls
+        // Run solver multiple times per frame for stiffness/stability
+        const bounce = 0.55;
+        const pad = 10;
+
+        for (let pass = 0; pass < 4; pass++) {
+          // Pass A: Resolve pill-to-pill AABB overlaps
           for (let i = 0; i < pills.length; i++) {
             for (let j = i + 1; j < pills.length; j++) {
               const p1 = pills[i];
               const p2 = pills[j];
 
-              // Centers
-              const c1x = p1.x + p1.width / 2;
-              const c1y = p1.y + p1.height / 2;
-              const c2x = p2.x + p2.width / 2;
-              const c2y = p2.y + p2.height / 2;
+              // Bounding box bounds
+              const minX1 = p1.x;
+              const maxX1 = p1.x + p1.width;
+              const minY1 = p1.y;
+              const maxY1 = p1.y + p1.height;
 
-              const dx = c2x - c1x;
-              const dy = c2y - c1y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              const rSum = (p1.radius + p2.radius) * 0.92; // slight overlap tolerance for aesthetic layout
+              const minX2 = p2.x;
+              const maxX2 = p2.x + p2.width;
+              const minY2 = p2.y;
+              const maxY2 = p2.y + p2.height;
 
-              if (dist < rSum) {
-                const nx = dx / (dist || 1);
-                const ny = dy / (dist || 1);
-                const overlap = rSum - dist;
+              // Check box intersection
+              const overlapX = Math.min(maxX1, maxX2) - Math.max(minX1, minX2);
+              const overlapY = Math.min(maxY1, maxY2) - Math.max(minY1, minY2);
 
-                // Overlap resolution
+              if (overlapX > 0 && overlapY > 0) {
+                let nx = 0;
+                let ny = 0;
+                let overlap = 0;
+
+                // Push along axis of minimum penetration
+                if (overlapX < overlapY) {
+                  overlap = overlapX;
+                  nx = (p1.x + p1.width / 2 < p2.x + p2.width / 2) ? 1 : -1;
+                } else {
+                  overlap = overlapY;
+                  ny = (p1.y + p1.height / 2 < p2.y + p2.height / 2) ? 1 : -1;
+                }
+
+                // Resolve overlaps
                 if (i === dragIdx) {
                   p2.x += nx * overlap;
                   p2.y += ny * overlap;
@@ -183,20 +174,23 @@ export default function FloatingPills() {
                   p1.vx -= nx * 1.5;
                   p1.vy -= ny * 1.5;
                 } else {
-                  // Push away relative to mass
+                  // Both push away relative to mass
                   const totalMass = p1.mass + p2.mass;
-                  p1.x -= nx * overlap * (p2.mass / totalMass);
-                  p1.y -= ny * overlap * (p2.mass / totalMass);
-                  p2.x += nx * overlap * (p1.mass / totalMass);
-                  p2.y += ny * overlap * (p1.mass / totalMass);
+                  const ratio1 = p2.mass / totalMass;
+                  const ratio2 = p1.mass / totalMass;
 
-                  // Elastic velocity response
+                  p1.x -= nx * overlap * ratio1;
+                  p1.y -= ny * overlap * ratio1;
+                  p2.x += nx * overlap * ratio2;
+                  p2.y += ny * overlap * ratio2;
+
+                  // Elastic velocity exchange
                   const rvx = p2.vx - p1.vx;
                   const rvy = p2.vy - p1.vy;
                   const velAlongNormal = rvx * nx + rvy * ny;
 
                   if (velAlongNormal < 0) {
-                    const restitution = 0.55;
+                    const restitution = 0.5;
                     const impulse = -(1 + restitution) * velAlongNormal / (1 / p1.mass + 1 / p2.mass);
                     p1.vx -= (impulse / p1.mass) * nx;
                     p1.vy -= (impulse / p1.mass) * ny;
@@ -207,9 +201,36 @@ export default function FloatingPills() {
               }
             }
           }
+
+          // Pass B: Enforce boundaries immediately (keeps elements inside walls strictly!)
+          pills.forEach((pill, idx) => {
+            if (idx === dragIdx) return; // Handled strictly in pointermove
+
+            // Left Wall
+            if (pill.x < pad) {
+              pill.x = pad;
+              pill.vx = -pill.vx * bounce;
+            }
+            // Right Wall
+            if (pill.x > w - pill.width - pad) {
+              pill.x = w - pill.width - pad;
+              pill.vx = -pill.vx * bounce;
+            }
+            // Top Wall
+            if (pill.y < pad) {
+              pill.y = pad;
+              pill.vy = -pill.vy * bounce;
+            }
+            // Bottom Wall
+            if (pill.y > h - pill.height - pad) {
+              pill.y = h - pill.height - pad;
+              pill.vy = -pill.vy * 0.45; // settle quicker
+              pill.vx *= 0.93; // ground friction
+            }
+          });
         }
 
-        // 4. Sync positions and increment opacities
+        // 3. Sync positions and increment opacities
         pills.forEach((pill) => {
           const op = pill.motionOpacity.get();
           if (op < 1) pill.motionOpacity.set(op + 0.035);
