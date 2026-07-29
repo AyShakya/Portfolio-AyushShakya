@@ -76,12 +76,12 @@ export default function Home() {
         </div>
 
         {/* Big Hero Title with Masked Reveal */}
-        <div className="overflow-hidden w-full text-center mt-6 px-[4vw] md:px-[6vw]">
+        <div className="overflow-hidden w-full text-center mt-6 px-[2.5vw]">
           <motion.h1 
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-            className="text-[13vw] sm:text-[8.5vw] md:text-[9vw] font-black tracking-tighter leading-[0.9] select-none text-neutral-900 dark:text-neutral-100 font-sans w-full uppercase flex flex-wrap sm:flex-nowrap justify-center gap-x-[3vw] gap-y-[1vw]"
+            className="text-[12.2vw] sm:text-[12.5vw] md:text-[12.7vw] lg:text-[12.8vw] font-black tracking-tighter leading-[0.9] select-none text-neutral-900 dark:text-neutral-100 font-sans w-full uppercase flex flex-nowrap whitespace-nowrap justify-center gap-x-[3vw] gap-y-0"
           >
             <span>AYUSH</span>
             <span>SHAKYA</span>
