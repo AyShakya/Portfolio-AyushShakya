@@ -1,11 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { loadPortfolioData } from '../utils/contentLoader';
 import CompassWidget from '../components/CompassWidget';
 import ClockWidget from '../components/ClockWidget';
 import WeatherWidget from '../components/WeatherWidget';
 import ImagePlaceholder from '../components/ImagePlaceholder';
 import PhoneWidgetDashboard from '../components/PhoneWidgetDashboard';
+
+// Framer Motion Variants for Staggered Details Reveal
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12 // 120ms Children Stagger
+    }
+  }
+};
+
+const childVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.16, 1, 0.3, 1] // Primary easing
+    }
+  }
+};
+
+// Variants for Main List Grid Entrance
+const gridContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  }
+};
+
+const titleRevealVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  }
+};
 
 export default function Works() {
   const { projectId } = useParams();
@@ -40,24 +97,32 @@ export default function Works() {
       );
     }
 
-    // Determine the next work in the list to link to at the bottom
     const currentIdx = works.findIndex(w => w.id === projectId);
     const nextWork = works[(currentIdx + 1) % works.length];
 
     // Special detailed view for N1 widgets
     if (projectId === 'n1-widgets') {
       return (
-        <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300"
+        >
           {/* Back to Home Link */}
-          <Link 
-            to="/" 
-            className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 mb-8 inline-block transition-colors"
-          >
-            &larr; Back to Home
-          </Link>
+          <motion.div variants={childVariants} className="mb-8">
+            <Link 
+              to="/" 
+              className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 inline-block transition-colors"
+            >
+              <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
+                &larr; Back to Home
+              </motion.span>
+            </Link>
+          </motion.div>
 
           {/* Header Grid */}
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-8 pb-10 border-b border-neutral-200/50 dark:border-neutral-900">
+          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-8 pb-10 border-b border-neutral-200/50 dark:border-neutral-900">
             <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase leading-none">
               {work.title}
             </h1>
@@ -67,10 +132,10 @@ export default function Works() {
                 {work.overview}
               </p>
             </div>
-          </section>
+          </motion.section>
 
           {/* Row 1: Widget Display & Phone Dashboard */}
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
+          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
             {/* Left: Widgets container */}
             <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-wrap md:flex-nowrap items-center justify-center gap-6 shadow-sm overflow-hidden">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
@@ -86,10 +151,10 @@ export default function Works() {
             <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch bg-neutral-100 dark:bg-neutral-900/30">
               <PhoneWidgetDashboard />
             </div>
-          </section>
+          </motion.section>
 
           {/* Row 2: Metadata Columns & About Section */}
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-16 xl:my-24 border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16">
+          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-16 xl:my-24 border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16">
             {/* Left Columns - Metadata */}
             <div className="lg:col-span-1 grid grid-cols-3 lg:grid-cols-1 gap-6">
               <div className="flex flex-col gap-1">
@@ -119,10 +184,10 @@ export default function Works() {
                 {work.about}
               </p>
             </div>
-          </section>
+          </motion.section>
 
           {/* Row 3: Phone Dashboard & Additional widget card details */}
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
+          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
             {/* Left: Phone Dashboard */}
             <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch bg-neutral-100 dark:bg-neutral-900/30">
               <PhoneWidgetDashboard />
@@ -180,24 +245,24 @@ export default function Works() {
                 
                 {/* 2x2 Circle Buttons panel */}
                 <div className="md:col-span-1 grid grid-cols-2 gap-3 justify-items-center items-center py-2">
-                  <button className="w-12 h-12 md:w-14 md:h-14 bg-white dark:bg-white border border-neutral-250 rounded-full flex items-center justify-center text-neutral-900 cursor-pointer shadow-sm hover:scale-105 transition-transform">
+                  <button className="w-12 h-12 md:w-14 md:h-14 bg-white dark:bg-white border border-neutral-250 rounded-full flex items-center justify-center text-neutral-900 cursor-pointer shadow-sm hover:scale-[1.03] active:scale-95 transition-all">
                     <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
                       <rect width="20" height="15" x="2" y="3" rx="2"/>
                       <path d="M12 18H5M12 18H19M12 18v3"/>
                     </svg>
                   </button>
-                  <button className="w-12 h-12 md:w-14 md:h-14 bg-neutral-900 dark:bg-neutral-950 border border-neutral-800 rounded-full flex items-center justify-center text-neutral-200 cursor-pointer shadow-md hover:scale-105 transition-transform">
+                  <button className="w-12 h-12 md:w-14 md:h-14 bg-neutral-900 dark:bg-neutral-950 border border-neutral-800 rounded-full flex items-center justify-center text-neutral-200 cursor-pointer shadow-md hover:scale-[1.03] active:scale-95 transition-all">
                     <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
                       <rect width="18" height="18" x="3" y="3" rx="2"/>
                       <path d="M7 8h10M7 12h10M7 16h6"/>
                     </svg>
                   </button>
-                  <button className="w-12 h-12 md:w-14 md:h-14 bg-white dark:bg-white border border-neutral-250 rounded-full flex items-center justify-center text-neutral-900 cursor-pointer shadow-sm hover:scale-105 transition-transform">
+                  <button className="w-12 h-12 md:w-14 md:h-14 bg-white dark:bg-white border border-neutral-250 rounded-full flex items-center justify-center text-neutral-900 cursor-pointer shadow-sm hover:scale-[1.03] active:scale-95 transition-all">
                     <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
                       <path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-13-7-13S5 10.7 5 15a7 7 0 0 0 7 7z"/>
                     </svg>
                   </button>
-                  <button className="w-12 h-12 md:w-14 md:h-14 bg-red-600 border border-transparent rounded-full flex items-center justify-center text-white cursor-pointer shadow-sm hover:scale-105 transition-transform">
+                  <button className="w-12 h-12 md:w-14 md:h-14 bg-red-600 border border-transparent rounded-full flex items-center justify-center text-white cursor-pointer shadow-sm hover:scale-[1.03] active:scale-95 transition-all">
                     <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
                       <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                       <circle cx="12" cy="13" r="4"/>
@@ -247,35 +312,46 @@ export default function Works() {
               </div>
 
             </div>
-          </section>
+          </motion.section>
 
           {/* Next Navigation */}
-          <div className="text-right py-10 mt-6 border-t border-neutral-200/50 dark:border-neutral-900">
+          <motion.div variants={childVariants} className="text-right py-10 mt-6 border-t border-neutral-200/50 dark:border-neutral-900">
             <Link 
               to={`/works/${nextWork.id}`}
-              className="text-lg md:text-xl font-bold tracking-widest text-neutral-800 dark:text-neutral-200 hover:opacity-85 hover:underline transition-all uppercase"
+              className="text-lg md:text-xl font-bold tracking-widest text-neutral-800 dark:text-neutral-200 hover:opacity-85 inline-block uppercase"
             >
-              NEXT &rarr;
+              <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
+                NEXT &rarr;
+              </motion.span>
             </Link>
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
       );
     }
 
     // Default detailed view for other works (H23, Glod Water)
     return (
-      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300">
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300"
+      >
         {/* Back Link */}
-        <Link 
-          to="/" 
-          className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 mb-8 inline-block transition-colors"
-        >
-          &larr; Back to Home
-        </Link>
+        <motion.div variants={childVariants} className="mb-8">
+          <Link 
+            to="/" 
+            className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 inline-block transition-colors"
+          >
+            <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
+              &larr; Back to Home
+            </motion.span>
+          </Link>
+        </motion.div>
 
         {/* Header Grid */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-8 pb-10 border-b border-neutral-200/50 dark:border-neutral-900">
+        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-8 pb-10 border-b border-neutral-200/50 dark:border-neutral-900">
           <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase leading-none">
             {work.title}
           </h1>
@@ -285,26 +361,26 @@ export default function Works() {
               {work.overview}
             </p>
           </div>
-        </section>
+        </motion.section>
 
         {/* Mockups Grid Placeholders */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
+        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
           <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch">
             <ImagePlaceholder 
               description={`${work.placeholder} (Primary Perspective)`}
-              className="w-full h-full !min-h-[300px] !rounded-[32px]"
+              className="w-full h-full !min-h-[300px] !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
             />
           </div>
           <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch">
             <ImagePlaceholder 
               description={`Detail closeup shot representing the ${work.title} project framework details.`}
-              className="w-full h-full !min-h-[300px] !rounded-[32px]"
+              className="w-full h-full !min-h-[300px] !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
             />
           </div>
-        </section>
+        </motion.section>
 
         {/* Metadata Details */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-16 xl:my-24 border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16">
+        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-16 xl:my-24 border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16">
           {/* Metadata */}
           <div className="lg:col-span-1 grid grid-cols-3 lg:grid-cols-1 gap-6">
             <div className="flex flex-col gap-1">
@@ -334,79 +410,101 @@ export default function Works() {
               {work.about}
             </p>
           </div>
-        </section>
+        </motion.section>
 
         {/* Next Link */}
-        <div className="text-right py-10 mt-6 border-t border-neutral-200/50 dark:border-neutral-900">
+        <motion.div variants={childVariants} className="text-right py-10 mt-6 border-t border-neutral-200/50 dark:border-neutral-900">
           <Link 
             to={`/works/${nextWork.id}`}
-            className="text-lg md:text-xl font-bold tracking-widest text-neutral-800 dark:text-neutral-200 hover:opacity-85 hover:underline transition-all uppercase"
+            className="text-lg md:text-xl font-bold tracking-widest text-neutral-800 dark:text-neutral-200 hover:opacity-85 inline-block uppercase"
           >
-            NEXT &rarr;
+            <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
+              NEXT &rarr;
+            </motion.span>
           </Link>
-        </div>
+        </motion.div>
 
-      </div>
+      </motion.div>
     );
   }
 
   // 2. Default works list if no projectId parameter
   return (
     <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300">
-      <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase mb-4">
+      <motion.h1 
+        variants={titleRevealVariants}
+        initial="hidden"
+        animate="visible"
+        className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase mb-4"
+      >
         Selected Works
-      </h1>
-      <p className="text-neutral-500 max-w-xl font-sans mb-12">
+      </motion.h1>
+      <motion.p 
+        variants={titleRevealVariants}
+        initial="hidden"
+        animate="visible"
+        className="text-neutral-500 max-w-xl font-sans mb-12"
+      >
         A list of branding projects, industrial UI design widgets, and premium packaging design concepts developed over the years.
-      </p>
+      </motion.p>
 
-      {/* Grid List */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 2xl:gap-16">
+      {/* Grid List with Entrance animations on scroll */}
+      <motion.div 
+        variants={gridContainerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-15% 0px" }}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 2xl:gap-16"
+      >
         
         {/* N1 Widgets */}
-        <Link to="/works/n1-widgets" className="group block">
-          <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-col md:flex-row items-center justify-center gap-6 shadow-sm overflow-hidden transition-all duration-300 hover:border-neutral-350 dark:hover:border-neutral-800 aspect-video">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-              <CompassWidget />
-              <ClockWidget />
-            </div>
-            <div className="flex items-center justify-center">
-              <WeatherWidget />
-            </div>
-          </div>
-          <div className="flex justify-between items-start mt-4">
-            <div>
-              <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline">
-                N1 widgets
-              </h3>
-              <p className="text-xs text-neutral-500 mt-1">Branding UI/UX</p>
-            </div>
-            <span className="text-xs font-mono text-neutral-500">2024</span>
-          </div>
-        </Link>
-
-        {/* Dynamic Works List */}
-        {works.filter(w => w.id !== 'n1-widgets').map(work => (
-          <Link key={work.id} to={`/works/${work.id}`} className="group block">
-            <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
-              <ImagePlaceholder 
-                description={work.placeholder} 
-                className="w-full h-full !min-h-0 !rounded-[32px]"
-              />
+        <motion.div variants={cardVariants} className="group">
+          <Link to="/works/n1-widgets" className="block">
+            <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-col md:flex-row items-center justify-center gap-6 shadow-sm overflow-hidden transition-all duration-300 hover:border-neutral-350 dark:hover:border-neutral-800 aspect-video">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full transition-transform duration-300 group-hover:scale-[1.04]">
+                <CompassWidget />
+                <ClockWidget />
+              </div>
+              <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.04]">
+                <WeatherWidget />
+              </div>
             </div>
             <div className="flex justify-between items-start mt-4">
               <div>
-                <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline">
-                  {work.title}
+                <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
+                  N1 widgets
                 </h3>
-                <p className="text-xs text-neutral-500 mt-1">{work.category}</p>
+                <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">Branding UI/UX</p>
               </div>
-              <span className="text-xs font-mono text-neutral-500">{work.year}</span>
+              <span className="text-xs font-mono text-neutral-500">2024</span>
             </div>
           </Link>
+        </motion.div>
+
+        {/* Dynamic Works List */}
+        {works.filter(w => w.id !== 'n1-widgets').map(work => (
+          <motion.div key={work.id} variants={cardVariants} className="group">
+            <Link to={`/works/${work.id}`} className="block">
+              <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
+                <ImagePlaceholder 
+                  description={work.placeholder} 
+                  className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                />
+              </div>
+              <div className="flex justify-between items-start mt-4">
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
+                    {work.title}
+                  </h3>
+                  <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">{work.category}</p>
+                </div>
+                <span className="text-xs font-mono text-neutral-500">{work.year}</span>
+              </div>
+            </Link>
+          </motion.div>
         ))}
 
-      </div>
+      </motion.div>
     </div>
   );
 }
