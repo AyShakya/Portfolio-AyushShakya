@@ -56,22 +56,22 @@ export default function Archive() {
   );
 
   return (
-    <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300">
+    <div className="w-full py-0 text-left transition-colors duration-300">
       
       {/* Responsive layout: Stacks on mobile, split columns on desktop */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 2xl:gap-20">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full items-stretch border-b border-neutral-200/50 dark:border-neutral-900">
         
         {/* Left Column on Desktop - Staggered Container */}
         <motion.div 
           variants={gridContainerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-15% 0px" }} // Play Once, Trigger at ~85% viewport
-          className="flex flex-col gap-10 xl:gap-16 2xl:gap-20"
+          viewport={{ once: true, margin: "-15% 0px" }}
+          className="flex flex-col gap-0 border-r-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 w-full"
         >
           
           {/* Header block (pinned to top of Left Column) */}
-          <motion.div variants={cardVariants} className="pb-10 border-b border-neutral-200/50 dark:border-neutral-900 pt-6">
+          <motion.div variants={cardVariants} className="p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900 flex flex-col justify-center min-h-[35vh]">
             <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase mb-4 leading-none">
               Archived works
             </h1>
@@ -82,14 +82,14 @@ export default function Archive() {
 
           {/* Left Column Archive Cards */}
           {leftColItems.map((item, idx) => (
-            <motion.div key={idx} variants={cardVariants} className="group block">
+            <motion.div key={idx} variants={cardVariants} className="group block p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
               <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-[4/3]">
                 <ImagePlaceholder 
                   description={item.placeholder} 
                   className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
                 />
               </div>
-              <div className="flex justify-between items-start mt-4">
+              <div className="flex justify-between items-start mt-6">
                 <div>
                   <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
                     {item.title}
@@ -108,20 +108,20 @@ export default function Archive() {
           variants={gridContainerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-15% 0px" }} // Play Once, Trigger at ~85% viewport
-          className="flex flex-col gap-10 xl:gap-16 2xl:gap-20"
+          viewport={{ once: true, margin: "-15% 0px" }}
+          className="flex flex-col gap-0 w-full"
         >
           
           {/* Right Column Archive Cards */}
           {rightColItems.map((item, idx) => (
-            <motion.div key={idx} variants={cardVariants} className="group block">
+            <motion.div key={idx} variants={cardVariants} className="group block p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
               <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-[4/3]">
                 <ImagePlaceholder 
                   description={item.placeholder} 
                   className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
                 />
               </div>
-              <div className="flex justify-between items-start mt-4">
+              <div className="flex justify-between items-start mt-6">
                 <div>
                   <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
                     {item.title}

@@ -41,7 +41,7 @@ export default function Navbar() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-8 md:py-10 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-900 transition-colors duration-300 sticky top-0 z-50 bg-[#0d0d0d]/80 dark:bg-[#0d0d0d]/80 light:bg-[#f9f9f9]/80 backdrop-blur-md"
+      className="w-full px-[5vw] py-8 md:py-10 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-900 transition-colors duration-300 sticky top-0 z-50 bg-[#0d0d0d]/80 dark:bg-[#0d0d0d]/80 light:bg-[#f9f9f9]/80 backdrop-blur-md"
     >
       {/* Logo */}
       <Link 

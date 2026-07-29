@@ -54,21 +54,13 @@ export default function Home() {
     setData(portfolioData);
   }, []);
 
-  if (!data) {
-    return (
-      <div className="w-full min-h-[60vh] flex items-center justify-center font-mono text-sm text-neutral-500">
-        Loading portfolio specs...
-      </div>
-    );
-  }
-
-  const { bio, experiences, works } = data;
+  const allWorks = [works.find(w => w.id === 'n1-widgets'), ...works.filter(w => w.id !== 'n1-widgets')].filter(Boolean);
 
   return (
-    <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-6 md:py-10 transition-colors duration-300">
+    <div className="w-full py-0 transition-colors duration-300">
       
       {/* HERO SECTION */}
-      <section className="relative flex flex-col items-center justify-between min-h-[45vh] pt-6 pb-8">
+      <section className="relative flex flex-col items-center justify-between min-h-[45vh] pt-6 pb-8 border-b border-neutral-200/50 dark:border-neutral-900 w-full">
         {/* Floating Draggable Badges */}
         <div className="w-full relative z-10">
           <FloatingPills />
@@ -80,7 +72,7 @@ export default function Home() {
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-            className="text-[11vw] font-black tracking-tighter leading-none select-none text-neutral-900 dark:text-neutral-100 font-sans w-full uppercase"
+            className="text-[8.2vw] font-black tracking-tighter leading-none select-none text-neutral-900 dark:text-neutral-100 font-sans w-full uppercase block text-center"
           >
             AKIO HIROSHI
           </motion.h1>
@@ -93,11 +85,11 @@ export default function Home() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-15% 0px" }}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-6 xl:gap-10 my-10 xl:my-16 items-stretch"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-0 border-b border-neutral-200/50 dark:border-neutral-900 w-full items-stretch"
       >
         
         {/* Left Card: Light Gray Container with Interactive Panels */}
-        <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 flex items-center justify-center border border-neutral-200/50 dark:border-neutral-900 transition-colors">
+        <div className="bg-neutral-100 dark:bg-neutral-900/30 p-8 md:p-12 xl:p-[5vw] flex items-center justify-center border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 transition-colors w-full">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 items-center justify-items-center w-full">
             
             {/* Column 1: Dot Face */}
@@ -134,7 +126,7 @@ export default function Home() {
         </div>
 
         {/* Right Card: Turntable Mockup & Phone Dashboard */}
-        <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch bg-neutral-100 dark:bg-neutral-900/30">
+        <div className="group flex items-stretch bg-neutral-100 dark:bg-neutral-900/30 w-full overflow-hidden">
           <PhoneWidgetDashboard />
         </div>
 
@@ -145,24 +137,28 @@ export default function Home() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="grid grid-cols-1 md:grid-cols-2 gap-8 xl:gap-12 my-16 md:my-24 xl:my-32 text-left border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16"
+        className="grid grid-cols-1 md:grid-cols-2 gap-0 my-0 text-left border-b border-neutral-200/50 dark:border-neutral-900 w-full items-stretch"
       >
-        <h2 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 leading-tight">
-          {bio.tagline}
-        </h2>
-        <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-xl xl:max-w-2xl">
-          {bio.description}
-        </p>
+        <div className="p-8 md:p-[5vw] border-b md:border-b-0 md:border-r border-neutral-200/50 dark:border-neutral-900 flex flex-col justify-center">
+          <h2 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 leading-tight">
+            {bio.tagline}
+          </h2>
+        </div>
+        <div className="p-8 md:p-[5vw] flex items-center">
+          <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-xl xl:max-w-2xl">
+            {bio.description}
+          </p>
+        </div>
       </motion.section>
 
       {/* SELECTED WORKS SECTION */}
-      <section className="my-16 xl:my-24 text-left">
+      <section className="my-0 text-left w-full border-b border-neutral-200/50 dark:border-neutral-900">
         <motion.div 
           variants={scrollRevealVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-15% 0px" }}
-          className="flex items-baseline justify-between mb-8 md:mb-12"
+          className="flex items-baseline justify-between p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900"
         >
           <h2 className="text-xl md:text-2xl xl:text-3xl font-bold text-neutral-900 dark:text-neutral-100 tracking-tight">
             Selected Works
@@ -176,56 +172,54 @@ export default function Home() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-15% 0px" }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 2xl:gap-16"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full"
         >
-          
-          {/* Card 1: N1 Widgets (Interactive widgets) */}
-          <motion.div variants={cardVariants} className="group">
-            <Link to="/works/n1-widgets" className="block">
-              <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-col md:flex-row items-center justify-center gap-6 shadow-sm overflow-hidden transition-all duration-300 hover:border-neutral-350 dark:hover:border-neutral-800 aspect-video">
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full transition-transform duration-300 group-hover:scale-[1.04]">
-                  <CompassWidget />
-                  <ClockWidget />
-                </div>
-                <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.04]">
-                  <WeatherWidget />
-                </div>
-              </div>
-              <div className="flex justify-between items-start mt-4">
-                <div>
-                  <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
-                    N1 widgets
-                  </h3>
-                  <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">Branding UI/UX</p>
-                </div>
-                <span className="text-xs font-mono text-neutral-500">2024</span>
-              </div>
-            </Link>
-          </motion.div>
+          {allWorks.map((work, idx) => {
+            const isLeft = idx % 2 === 0;
+            const isN1 = work.id === 'n1-widgets';
 
-          {/* Loop over remaining works dynamically */}
-          {works.filter(w => w.id !== 'n1-widgets').map((work) => (
-            <motion.div key={work.id} variants={cardVariants} className="group">
-              <Link to={`/works/${work.id}`} className="block">
-                <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
-                  <ImagePlaceholder 
-                    description={work.placeholder} 
-                    className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
-                  />
-                </div>
-                <div className="flex justify-between items-start mt-4">
-                  <div>
-                    <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
-                      {work.title}
-                    </h3>
-                    <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">{work.category}</p>
+            return (
+              <motion.div 
+                key={work.id} 
+                variants={cardVariants} 
+                className={`group p-8 md:p-[5vw] flex flex-col justify-between border-b border-neutral-200/50 dark:border-neutral-900 ${
+                  isLeft ? 'lg:border-r' : ''
+                }`}
+              >
+                <Link to={isN1 ? "/works/n1-widgets" : `/works/${work.id}`} className="block">
+                  {isN1 ? (
+                    <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-col md:flex-row items-center justify-center gap-6 shadow-sm overflow-hidden transition-all duration-300 hover:border-neutral-350 dark:hover:border-neutral-800 aspect-video">
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full transition-transform duration-300 group-hover:scale-[1.04]">
+                        <CompassWidget />
+                        <ClockWidget />
+                      </div>
+                      <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.04]">
+                        <WeatherWidget />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
+                      <ImagePlaceholder 
+                        description={work.placeholder} 
+                        className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                      />
+                    </div>
+                  )}
+                  <div className="flex justify-between items-start mt-6">
+                    <div>
+                      <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
+                        {work.title}
+                      </h3>
+                      <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">
+                        {isN1 ? "Branding UI/UX" : work.category}
+                      </p>
+                    </div>
+                    <span className="text-xs font-mono text-neutral-500">{work.year}</span>
                   </div>
-                  <span className="text-xs font-mono text-neutral-500">{work.year}</span>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-
+                </Link>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </section>
 
@@ -235,11 +229,11 @@ export default function Home() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-15% 0px" }}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-20 xl:my-32 border-t border-neutral-200/50 dark:border-neutral-900 pt-16 xl:pt-20 text-left"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-0 w-full items-stretch border-b border-neutral-200/50 dark:border-neutral-900"
       >
         
         {/* Left Column: Playground Link */}
-        <div className="lg:col-span-1 flex flex-col justify-between gap-4">
+        <div className="p-8 md:p-[5vw] border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex flex-col justify-between gap-8">
           <Link 
             to="/archive" 
             className="text-lg md:text-xl font-medium underline text-neutral-900 dark:text-neutral-100 hover:opacity-80 transition-opacity inline-block"
@@ -256,8 +250,8 @@ export default function Home() {
         </div>
 
         {/* Right Columns: Description & Experiences Timeline */}
-        <div className="lg:col-span-2 flex flex-col gap-10">
-          {/* Repeated bio description as seen in screenshots */}
+        <div className="lg:col-span-2 p-8 md:p-[5vw] flex flex-col gap-12">
+          {/* Repeated bio description */}
           <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-2xl xl:max-w-3xl">
             {bio.description}
           </p>

@@ -107,10 +107,10 @@ export default function Works() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300"
+          className="w-full py-0 text-left transition-colors duration-300 border-b border-neutral-200/50 dark:border-neutral-900"
         >
           {/* Back to Home Link */}
-          <motion.div variants={childVariants} className="mb-8">
+          <motion.div variants={childVariants} className="p-8 md:p-[5vw] pb-0">
             <Link 
               to="/" 
               className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 inline-block transition-colors"
@@ -122,11 +122,11 @@ export default function Works() {
           </motion.div>
 
           {/* Header Grid */}
-          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-8 pb-10 border-b border-neutral-200/50 dark:border-neutral-900">
+          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-0 my-0 p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
             <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase leading-none">
               {work.title}
             </h1>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 justify-center mt-6 lg:mt-0">
               <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-450 dark:text-neutral-400">Overview</h4>
               <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-xl xl:max-w-2xl">
                 {work.overview}
@@ -135,9 +135,9 @@ export default function Works() {
           </motion.section>
 
           {/* Row 1: Widget Display & Phone Dashboard */}
-          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
+          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-0 border-b border-neutral-200/50 dark:border-neutral-900 w-full items-stretch">
             {/* Left: Widgets container */}
-            <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-wrap md:flex-nowrap items-center justify-center gap-6 shadow-sm overflow-hidden">
+            <div className="bg-neutral-100 dark:bg-neutral-900/30 p-8 md:p-[5vw] border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex flex-wrap md:flex-nowrap items-center justify-center gap-6 shadow-sm overflow-hidden">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
                 <CompassWidget />
                 <ClockWidget />
@@ -148,15 +148,15 @@ export default function Works() {
             </div>
 
             {/* Right: Phone Dashboard */}
-            <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch bg-neutral-100 dark:bg-neutral-900/30">
+            <div className="group flex items-stretch bg-neutral-100 dark:bg-neutral-900/30 w-full overflow-hidden">
               <PhoneWidgetDashboard />
             </div>
           </motion.section>
 
           {/* Row 2: Metadata Columns & About Section */}
-          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-16 xl:my-24 border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16">
+          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-0 border-b border-neutral-200/50 dark:border-neutral-900 w-full items-stretch">
             {/* Left Columns - Metadata */}
-            <div className="lg:col-span-1 grid grid-cols-3 lg:grid-cols-1 gap-6">
+            <div className="p-8 md:p-[5vw] border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 grid grid-cols-3 lg:grid-cols-1 gap-6">
               <div className="flex flex-col gap-1">
                 <span className="text-[10px] font-mono tracking-widest text-neutral-400 uppercase">Year</span>
                 <p className="text-sm font-bold text-neutral-850 dark:text-neutral-200">{work.year}</p>
@@ -176,7 +176,7 @@ export default function Works() {
             </div>
 
             {/* Right Column - About Project text */}
-            <div className="lg:col-span-2 flex flex-col gap-4">
+            <div className="lg:col-span-2 p-8 md:p-[5vw] flex flex-col gap-4">
               <h3 className="text-lg md:text-xl font-bold text-neutral-900 dark:text-neutral-100">
                 About the project
               </h3>
@@ -187,14 +187,14 @@ export default function Works() {
           </motion.section>
 
           {/* Row 3: Phone Dashboard & Additional widget card details */}
-          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
+          <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-0 border-b border-neutral-200/50 dark:border-neutral-900 w-full items-stretch">
             {/* Left: Phone Dashboard */}
-            <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-md flex items-stretch bg-neutral-100 dark:bg-neutral-900/30">
+            <div className="group flex items-stretch bg-neutral-100 dark:bg-neutral-900/30 w-full overflow-hidden border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900">
               <PhoneWidgetDashboard />
             </div>
 
             {/* Right: Detailed cards container */}
-            <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-col gap-6 justify-center shadow-sm">
+            <div className="bg-neutral-100 dark:bg-neutral-900/30 p-8 md:p-[5vw] flex flex-col gap-6 justify-center">
               
               {/* Row 3A: Steps, Time, Spotify cards */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
@@ -315,7 +315,7 @@ export default function Works() {
           </motion.section>
 
           {/* Next Navigation */}
-          <motion.div variants={childVariants} className="text-right py-10 mt-6 border-t border-neutral-200/50 dark:border-neutral-900">
+          <motion.div variants={childVariants} className="text-right p-8 md:p-[5vw]">
             <Link 
               to={`/works/${nextWork.id}`}
               className="text-lg md:text-xl font-bold tracking-widest text-neutral-800 dark:text-neutral-200 hover:opacity-85 inline-block uppercase"
@@ -336,10 +336,10 @@ export default function Works() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300"
+        className="w-full py-0 text-left transition-colors duration-300 border-b border-neutral-200/50 dark:border-neutral-900"
       >
         {/* Back Link */}
-        <motion.div variants={childVariants} className="mb-8">
+        <motion.div variants={childVariants} className="p-8 md:p-[5vw] pb-0">
           <Link 
             to="/" 
             className="text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 inline-block transition-colors"
@@ -351,11 +351,11 @@ export default function Works() {
         </motion.div>
 
         {/* Header Grid */}
-        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-8 pb-10 border-b border-neutral-200/50 dark:border-neutral-900">
+        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-0 my-0 p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
           <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase leading-none">
             {work.title}
           </h1>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 justify-center mt-6 lg:mt-0">
             <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-400">Overview</h4>
             <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-xl xl:max-w-2xl">
               {work.overview}
@@ -364,14 +364,14 @@ export default function Works() {
         </motion.section>
 
         {/* Mockups Grid Placeholders */}
-        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 my-10 xl:my-16 items-stretch">
-          <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch">
+        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-0 border-b border-neutral-200/50 dark:border-neutral-900 w-full items-stretch">
+          <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch p-8 md:p-[5vw]">
             <ImagePlaceholder 
               description={`${work.placeholder} (Primary Perspective)`}
               className="w-full h-full !min-h-[300px] !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
             />
           </div>
-          <div className="group rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch">
+          <div className="group flex items-stretch p-8 md:p-[5vw]">
             <ImagePlaceholder 
               description={`Detail closeup shot representing the ${work.title} project framework details.`}
               className="w-full h-full !min-h-[300px] !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
@@ -380,9 +380,9 @@ export default function Works() {
         </motion.section>
 
         {/* Metadata Details */}
-        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 my-16 xl:my-24 border-t border-neutral-200/50 dark:border-neutral-900 pt-12 xl:pt-16">
+        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-0 border-b border-neutral-200/50 dark:border-neutral-900 w-full items-stretch">
           {/* Metadata */}
-          <div className="lg:col-span-1 grid grid-cols-3 lg:grid-cols-1 gap-6">
+          <div className="p-8 md:p-[5vw] border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 grid grid-cols-3 lg:grid-cols-1 gap-6">
             <div className="flex flex-col gap-1">
               <span className="text-[10px] font-mono tracking-widest text-neutral-400 uppercase">Year</span>
               <p className="text-sm font-bold text-neutral-850 dark:text-neutral-200">{work.year}</p>
@@ -402,7 +402,7 @@ export default function Works() {
           </div>
 
           {/* Description */}
-          <div className="lg:col-span-2 flex flex-col gap-4">
+          <div className="lg:col-span-2 p-8 md:p-[5vw] flex flex-col gap-4">
             <h3 className="text-lg md:text-xl font-bold text-neutral-900 dark:text-neutral-100">
               About the project
             </h3>
@@ -413,7 +413,7 @@ export default function Works() {
         </motion.section>
 
         {/* Next Link */}
-        <motion.div variants={childVariants} className="text-right py-10 mt-6 border-t border-neutral-200/50 dark:border-neutral-900">
+        <motion.div variants={childVariants} className="text-right p-8 md:p-[5vw]">
           <Link 
             to={`/works/${nextWork.id}`}
             className="text-lg md:text-xl font-bold tracking-widest text-neutral-800 dark:text-neutral-200 hover:opacity-85 inline-block uppercase"
@@ -429,24 +429,28 @@ export default function Works() {
   }
 
   // 2. Default works list if no projectId parameter
+  const allWorks = [works.find(w => w.id === 'n1-widgets'), ...works.filter(w => w.id !== 'n1-widgets')].filter(Boolean);
+
   return (
-    <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-28 2xl:px-36 py-10 text-left transition-colors duration-300">
-      <motion.h1 
-        variants={titleRevealVariants}
-        initial="hidden"
-        animate="visible"
-        className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase mb-4"
-      >
-        Selected Works
-      </motion.h1>
-      <motion.p 
-        variants={titleRevealVariants}
-        initial="hidden"
-        animate="visible"
-        className="text-neutral-500 max-w-xl font-sans mb-12"
-      >
-        A list of branding projects, industrial UI design widgets, and premium packaging design concepts developed over the years.
-      </motion.p>
+    <div className="w-full py-0 text-left transition-colors duration-300">
+      <div className="p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
+        <motion.h1 
+          variants={titleRevealVariants}
+          initial="hidden"
+          animate="visible"
+          className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 uppercase mb-4"
+        >
+          Selected Works
+        </motion.h1>
+        <motion.p 
+          variants={titleRevealVariants}
+          initial="hidden"
+          animate="visible"
+          className="text-neutral-500 max-w-xl font-sans"
+        >
+          A list of branding projects, industrial UI design widgets, and premium packaging design concepts developed over the years.
+        </motion.p>
+      </div>
 
       {/* Grid List with Entrance animations on scroll */}
       <motion.div 
@@ -454,56 +458,54 @@ export default function Works() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-15% 0px" }}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 2xl:gap-16"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full"
       >
-        
-        {/* N1 Widgets */}
-        <motion.div variants={cardVariants} className="group">
-          <Link to="/works/n1-widgets" className="block">
-            <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-col md:flex-row items-center justify-center gap-6 shadow-sm overflow-hidden transition-all duration-300 hover:border-neutral-350 dark:hover:border-neutral-800 aspect-video">
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full transition-transform duration-300 group-hover:scale-[1.04]">
-                <CompassWidget />
-                <ClockWidget />
-              </div>
-              <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.04]">
-                <WeatherWidget />
-              </div>
-            </div>
-            <div className="flex justify-between items-start mt-4">
-              <div>
-                <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
-                  N1 widgets
-                </h3>
-                <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">Branding UI/UX</p>
-              </div>
-              <span className="text-xs font-mono text-neutral-500">2024</span>
-            </div>
-          </Link>
-        </motion.div>
+        {allWorks.map((work, idx) => {
+          const isLeft = idx % 2 === 0;
+          const isN1 = work.id === 'n1-widgets';
 
-        {/* Dynamic Works List */}
-        {works.filter(w => w.id !== 'n1-widgets').map(work => (
-          <motion.div key={work.id} variants={cardVariants} className="group">
-            <Link to={`/works/${work.id}`} className="block">
-              <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
-                <ImagePlaceholder 
-                  description={work.placeholder} 
-                  className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
-                />
-              </div>
-              <div className="flex justify-between items-start mt-4">
-                <div>
-                  <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
-                    {work.title}
-                  </h3>
-                  <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">{work.category}</p>
+          return (
+            <motion.div 
+              key={work.id} 
+              variants={cardVariants} 
+              className={`group p-8 md:p-[5vw] flex flex-col justify-between border-b border-neutral-200/50 dark:border-neutral-900 ${
+                isLeft ? 'lg:border-r' : ''
+              }`}
+            >
+              <Link to={isN1 ? "/works/n1-widgets" : `/works/${work.id}`} className="block">
+                {isN1 ? (
+                  <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-col md:flex-row items-center justify-center gap-6 shadow-sm overflow-hidden transition-all duration-300 hover:border-neutral-350 dark:hover:border-neutral-800 aspect-video">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full transition-transform duration-300 group-hover:scale-[1.04]">
+                      <CompassWidget />
+                      <ClockWidget />
+                    </div>
+                    <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.04]">
+                      <WeatherWidget />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
+                    <ImagePlaceholder 
+                      description={work.placeholder} 
+                      className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                    />
+                  </div>
+                )}
+                <div className="flex justify-between items-start mt-6">
+                  <div>
+                    <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
+                      {work.title}
+                    </h3>
+                    <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">
+                      {isN1 ? "Branding UI/UX" : work.category}
+                    </p>
+                  </div>
+                  <span className="text-xs font-mono text-neutral-500">{work.year}</span>
                 </div>
-                <span className="text-xs font-mono text-neutral-500">{work.year}</span>
-              </div>
-            </Link>
-          </motion.div>
-        ))}
-
+              </Link>
+            </motion.div>
+          );
+        })}
       </motion.div>
     </div>
   );
