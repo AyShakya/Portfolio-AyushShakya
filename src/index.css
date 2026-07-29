@@ -15,6 +15,12 @@
   --color-card-dark: #121212;
   --color-card-light: #f5f5f5;
   --color-accent-red: #ff3b30;
+  
+  --color-neutral-250: #dadada;
+  --color-neutral-350: #bcbcbc;
+  --color-neutral-450: #8c8c8c;
+  --color-neutral-750: #333333;
+  --color-neutral-850: #1f1f1f;
 }
 
 /* Custom styles */
