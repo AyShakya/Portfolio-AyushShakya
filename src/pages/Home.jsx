@@ -69,7 +69,7 @@ export default function Home() {
     <div className="w-full py-0 transition-colors duration-300">
       
       {/* HERO SECTION */}
-      <section className="relative flex flex-col items-center justify-between min-h-[45vh] pt-6 pb-8 border-b border-neutral-200/50 dark:border-neutral-900 w-full">
+      <section className="relative flex flex-col items-center justify-between min-h-[40vh] pt-6 pb-8 border-b border-neutral-200/30 dark:border-transparent w-full">
         {/* Floating Draggable Badges */}
         <div className="w-full relative z-10">
           <FloatingPills />
@@ -81,7 +81,7 @@ export default function Home() {
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-            className="text-[13vw] sm:text-[13.5vw] md:text-[14vw] lg:text-[14.5vw] xl:text-[15vw] font-extrabold tracking-[-0.03em] leading-[0.9] select-none text-[#eaeaea] dark:text-[#eaeaea] font-heading w-full uppercase flex flex-nowrap whitespace-nowrap justify-center gap-x-[3.5vw] gap-y-0"
+            className="text-[16vw] sm:text-[16.5vw] md:text-[17vw] lg:text-[17.5vw] xl:text-[18vw] font-extrabold tracking-[-0.04em] leading-[0.8] select-none text-[#eaeaea] dark:text-[#eaeaea] font-heading w-full uppercase flex flex-row items-center justify-center gap-x-[2.5vw] gap-y-0"
           >
             <span>AYUSH</span>
             <span>SHAKYA</span>
