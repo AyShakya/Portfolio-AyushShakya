@@ -18,12 +18,12 @@ export default function FloatingPills() {
 
   // Physics state stored in a ref for frame-by-frame updates
   const pillsRef = useRef([
-    { text: 'BRAND DESIGNER', type: 'oval', w: 150, h: 50 },
-    { text: 'KIX \u25CF', type: 'kix', w: 100, h: 50 },
-    { text: '*', type: 'circle', w: 64, h: 64 },
-    { text: 'CREATIVE DIRECTOR', type: 'oval', w: 200, h: 50 },
-    { text: '\u2193', type: 'circle-arrow', w: 64, h: 64 },
-    { text: 'AYUSH', type: 'oval-small', w: 110, h: 50 }
+    { text: 'BRAND DESIGNER', type: 'oval', w: 150, h: 50, rotate: 1 },
+    { text: 'KIX \u25CF', type: 'kix', w: 100, h: 50, rotate: 0 },
+    { text: '*', type: 'circle', w: 64, h: 64, rotate: 0 },
+    { text: 'CREATIVE DIRECTOR', type: 'oval', w: 200, h: 50, rotate: -5 },
+    { text: '\u2193', type: 'circle-arrow', w: 64, h: 64, rotate: 0 },
+    { text: 'AYUSH', type: 'oval-small', w: 110, h: 50, rotate: 0 }
   ].map((pill, idx) => ({
     ...pill,
     x: 0,
@@ -53,23 +53,27 @@ export default function FloatingPills() {
         setContainerSize({ width: w, height: h });
 
         const isMobile = w < 768;
-        pillsRef.current.forEach((pill, idx) => {
+        pillsRef.current.forEach((pill) => {
           let pillW = pill.w;
           let pillH = pill.h;
           
           if (pill.type === 'circle' || pill.type === 'circle-arrow') {
-            pillW = isMobile ? 64 : 80;
-            pillH = isMobile ? 64 : 80;
+            pillW = isMobile ? 48 : 64;
+            pillH = isMobile ? 48 : 64;
             pill.radius = pillW / 2;
           } else {
-            if (pill.type === 'oval-small') {
-              pillW = isMobile ? 100 : 120;
-            } else if (pill.text.length > 12) {
-              pillW = isMobile ? 180 : 220;
+            if (pill.text === 'AYUSH') {
+              pillW = isMobile ? 80 : 100;
+            } else if (pill.text === 'CREATIVE DIRECTOR') {
+              pillW = isMobile ? 160 : 200;
+            } else if (pill.text === 'BRAND DESIGNER') {
+              pillW = isMobile ? 140 : 170;
+            } else if (pill.text === 'KIX \u25CF') {
+              pillW = isMobile ? 90 : 110;
             } else {
-              pillW = isMobile ? 120 : 150;
+              pillW = isMobile ? 100 : 130;
             }
-            pillH = isMobile ? 48 : 56;
+            pillH = isMobile ? 38 : 46;
             // Bounding radius is average of width and height / 2 to make capsule stacking look natural
             pill.radius = (pillW + pillH) / 4;
           }
@@ -79,13 +83,37 @@ export default function FloatingPills() {
 
           // If not initialized, place them at columns and start falling from random top coordinates
           if (pill.x === 0 && pill.y === 0) {
-            const segment = w / pillsRef.current.length;
-            pill.x = segment * idx + Math.random() * (segment - pillW);
-            // Drop height starts randomly above screen boundary
-            pill.y = -350 - Math.random() * 250;
-            // Add diagonal drop vector velocity
-            pill.vx = -4 + Math.random() * 8;
-            pill.vy = 4 + Math.random() * 6;
+            let targetXPercent = 0.5;
+            let dropHeight = -150;
+            
+            if (pill.text === 'CREATIVE DIRECTOR') {
+              targetXPercent = 0.16;
+              dropHeight = -350; // drops later, stacks on arrow
+            } else if (pill.text === '\u2193') {
+              targetXPercent = 0.12;
+              dropHeight = -150; // drops first
+            } else if (pill.text === 'KIX \u25CF') {
+              targetXPercent = 0.35;
+              dropHeight = -220;
+            } else if (pill.text === 'BRAND DESIGNER') {
+              targetXPercent = 0.52;
+              dropHeight = -150; // drops first
+            } else if (pill.text === '*') {
+              targetXPercent = 0.56;
+              dropHeight = -350; // drops later, stacks on BRAND DESIGNER
+            } else if (pill.text === 'AYUSH') {
+              targetXPercent = 0.85;
+              dropHeight = -200;
+            }
+
+            // Set initial position
+            pill.x = w * targetXPercent - pillW / 2;
+            pill.x = Math.max(15, Math.min(w - pillW - 15, pill.x));
+            pill.y = dropHeight - Math.random() * 50;
+            
+            // Subtle random horizontal velocity so it feels natural, but minimal to prevent scattering
+            pill.vx = -1 + Math.random() * 2;
+            pill.vy = 4 + Math.random() * 3;
           }
         });
         setIsReady(true);
@@ -122,7 +150,6 @@ export default function FloatingPills() {
         });
 
         // 2. Resolve Pill-to-Pill Box Collisions & Enforce strict boundary walls
-        // Run solver multiple times per frame for stiffness/stability
         const bounce = 0.55;
         const pad = 10;
 
@@ -174,7 +201,6 @@ export default function FloatingPills() {
                   p1.vx -= nx * 1.5;
                   p1.vy -= ny * 1.5;
                 } else {
-                  // Both push away relative to mass
                   const totalMass = p1.mass + p2.mass;
                   const ratio1 = p2.mass / totalMass;
                   const ratio2 = p1.mass / totalMass;
@@ -202,9 +228,9 @@ export default function FloatingPills() {
             }
           }
 
-          // Pass B: Enforce boundaries immediately (keeps elements inside walls strictly!)
+          // Pass B: Enforce boundaries immediately
           pills.forEach((pill, idx) => {
-            if (idx === dragIdx) return; // Handled strictly in pointermove
+            if (idx === dragIdx) return;
 
             // Left Wall
             if (pill.x < pad) {
@@ -287,7 +313,6 @@ export default function FloatingPills() {
       targetX = Math.max(pad, Math.min(w - pill.width - pad, targetX));
       targetY = Math.max(pad, Math.min(h - pill.height - pad, targetY));
 
-      // Calculate throwing velocity
       pill.vx = (targetX - pill.x) * 0.75;
       pill.vy = (targetY - pill.y) * 0.75;
 
@@ -310,7 +335,7 @@ export default function FloatingPills() {
   return (
     <div 
       ref={containerRef} 
-      className="relative w-full h-[320px] md:h-[400px] overflow-hidden select-none bg-transparent"
+      className="relative w-full h-[280px] md:h-[350px] overflow-hidden select-none bg-transparent"
     >
       {isReady && pillsRef.current.map((pill, idx) => {
         const isCircle = pill.type === 'circle' || pill.type === 'circle-arrow';
@@ -321,20 +346,19 @@ export default function FloatingPills() {
             style={{
               x: pill.motionX,
               y: pill.motionY,
-              opacity: pill.motionOpacity
+              opacity: pill.motionOpacity,
+              rotate: pill.rotate || 0
             }}
             onPointerDown={(e) => handlePointerDown(e, idx)}
-            whileHover={{ scale: 1.04 }}
-            className={`absolute left-0 top-0 cursor-grab active:cursor-grabbing select-none font-mono tracking-[0.12em] border transition-colors duration-300 ${
+            whileHover={{ scale: 1.05 }}
+            className={`absolute left-0 top-0 cursor-grab active:cursor-grabbing select-none font-mono tracking-[0.15em] border transition-colors duration-300 ${
               isCircle 
-                ? 'w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl md:text-3xl font-sans' 
-                : 'px-8 py-3.5 md:px-10 md:py-4.5 rounded-full text-sm md:text-base'
+                ? 'w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center text-lg md:text-xl font-sans' 
+                : 'px-5 py-2 md:px-7 md:py-2.5 rounded-full text-xs md:text-sm'
             } ${
-              pill.type === 'circle'
-                ? 'bg-[#eaeaea] dark:bg-[#eaeaea] text-[#0d0d0e] dark:text-[#0d0d0e] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.15)] font-bold'
-                : pill.type === 'circle-arrow'
-                ? 'bg-[#eaeaea] dark:bg-[#eaeaea] text-[#0d0d0e] dark:text-[#0d0d0e] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.15)] font-sans'
-                : 'bg-transparent text-[#eaeaea] dark:text-[#eaeaea] border-[#eaeaea]/25 dark:border-[#eaeaea]/25 backdrop-blur-sm'
+              pill.type === 'circle' || pill.type === 'circle-arrow'
+                ? 'bg-[#eaeaea] dark:bg-[#eaeaea] text-[#0d0d0e] dark:text-[#0d0d0e] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.12)] font-bold'
+                : 'bg-white/10 dark:bg-black/40 text-neutral-900 dark:text-[#eaeaea] border-neutral-300 dark:border-[#eaeaea]/20 backdrop-blur-md'
             }`}
           >
             {pill.text}
