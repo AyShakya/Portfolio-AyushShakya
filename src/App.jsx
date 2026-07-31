@@ -51,7 +51,7 @@ function App() {
   return (
     <ReactLenis root options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
       <Router>
-        <div className="min-h-screen flex flex-col bg-[#0d0d0e] text-[#eaeaea] selection:bg-neutral-800 selection:text-[#eaeaea] dark:bg-[#0d0d0e] dark:text-[#eaeaea] transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-[#161618] text-[#eaeaea] selection:bg-neutral-800 selection:text-[#eaeaea] dark:bg-[#161618] dark:text-[#eaeaea] transition-colors duration-300">
           {/* Navigation header */}
           <Navbar />
 
