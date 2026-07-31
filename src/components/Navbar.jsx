@@ -41,7 +41,7 @@ export default function Navbar() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full px-[5vw] py-8 md:py-10 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-900 transition-colors duration-300 sticky top-0 z-50 bg-[#0d0d0e]/80 dark:bg-[#0d0d0e]/80 light:bg-white/80 backdrop-blur-md"
+      className="w-full px-[5vw] py-8 md:py-10 flex items-center justify-between border-b border-neutral-200/30 dark:border-transparent transition-colors duration-300 sticky top-0 z-50 bg-[#161618]/80 dark:bg-[#161618]/80 light:bg-white/80 backdrop-blur-md"
     >
       {/* Logo */}
       <Link 
@@ -59,8 +59,8 @@ export default function Navbar() {
             <Link
               key={link.path}
               to={link.path}
-              className={`relative py-1 text-xs md:text-sm font-medium tracking-widest transition-colors duration-250 ${
-                active ? 'text-[#eaeaea] font-semibold' : 'text-neutral-500 hover:text-[#eaeaea]'
+              className={`relative py-1 text-xs md:text-sm font-medium tracking-[0.2em] transition-colors duration-250 ${
+                active ? 'text-[#eaeaea]' : 'text-neutral-500 hover:text-[#eaeaea]'
               }`}
             >
               <motion.span
@@ -70,13 +70,6 @@ export default function Navbar() {
               >
                 {link.name}
               </motion.span>
-              {active && (
-                <motion.div
-                  layoutId="active-indicator"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#eaeaea] dark:bg-[#eaeaea]"
-                  transition={{ type: 'spring', stiffness: 320, damping: 24 }}
-                />
-              )}
             </Link>
           );
         })}
@@ -85,15 +78,15 @@ export default function Navbar() {
       {/* Theme Switcher Button */}
       <motion.button
         onClick={toggleTheme}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-        className="w-8 h-8 rounded-full border border-neutral-300 dark:border-neutral-800 flex items-center justify-center cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors focus:outline-none"
+        className="w-8 h-8 flex items-center justify-center cursor-pointer focus:outline-none"
         aria-label="Toggle theme"
       >
-        <div className="w-5 h-5 rounded-full overflow-hidden flex">
-          <div className="w-2.5 h-5 bg-neutral-900 dark:bg-neutral-100"></div>
-          <div className="w-2.5 h-5 bg-transparent border-l border-neutral-900 dark:border-neutral-100"></div>
+        <div className="w-3.5 h-3.5 rounded-full overflow-hidden flex border border-neutral-400 dark:border-[#eaeaea]/30">
+          <div className={`w-1/2 h-full ${isLight ? 'bg-neutral-300' : 'bg-transparent dark:bg-transparent'}`}></div >
+          <div className={`w-1/2 h-full ${isLight ? 'bg-neutral-950' : 'bg-transparent dark:bg-[#eaeaea]'}`}></div >
         </div>
       </motion.button>
     </motion.header>
