@@ -247,13 +247,15 @@ export default function Works() {
         </motion.div>
 
         {/* Header Grid */}
-        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-0 my-0 p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
-          <h1 className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-[-0.04em] text-[#161618] dark:text-[#eaeaea] uppercase leading-none">
-            {work.title}
-          </h1>
-          <div className="flex flex-col gap-2 justify-center mt-6 lg:mt-0">
+        <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[5vw] my-0 p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900 items-center">
+          <div className="lg:col-span-7 xl:col-span-8">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-[-0.04em] text-[#161618] dark:text-[#eaeaea] uppercase leading-[0.9] break-words">
+              {work.title}
+            </h1>
+          </div>
+          <div className="lg:col-span-5 xl:col-span-4 flex flex-col gap-2 justify-center">
             <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-400">Overview</h4>
-            <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-xl xl:max-w-2xl">
+            <p className="text-sm md:text-base xl:text-lg leading-relaxed text-neutral-500 font-sans max-w-xl">
               {work.overview}
             </p>
           </div>
