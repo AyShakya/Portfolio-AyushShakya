@@ -94,12 +94,23 @@ export function loadPortfolioData() {
       services: metadata.services ? metadata.services.split('\\n').map(s => s.trim()) : [],
       about: metadata.about || '',
       placeholder: metadata.placeholder || '',
+      image: metadata.image || '',
       content: content
     };
   });
 
-  // Sort works by year desc or id (we can keep a custom sorting if needed, e.g. n1-widgets, h23, glod-water)
-  const orderMap = { 'n1-widgets': 1, 'h23': 2, 'glod-water': 3 };
+  // Sort works by custom order map
+  const orderMap = {
+    'n1-widgets': 1,
+    'catalyst': 2,
+    'watcher': 3,
+    'utaran': 4,
+    'cooked': 5,
+    'eventease': 6,
+    'livedesk': 7,
+    'h23': 8,
+    'glod-water': 9
+  };
   works.sort((a, b) => (orderMap[a.id] || 99) - (orderMap[b.id] || 99));
 
   // 3. Parse Archive Data
@@ -112,6 +123,7 @@ export function loadPortfolioData() {
       category: metadata.category || '',
       year: metadata.year || '',
       placeholder: metadata.placeholder || '',
+      image: metadata.image || '',
       content: content
     };
   });
