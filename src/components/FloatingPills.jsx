@@ -339,6 +339,7 @@ export default function FloatingPills() {
     >
       {isReady && pillsRef.current.map((pill, idx) => {
         const isCircle = pill.type === 'circle' || pill.type === 'circle-arrow';
+        const isSquircle = pill.type === 'kix' || pill.type === 'oval-small';
 
         return (
           <motion.div
@@ -353,14 +354,12 @@ export default function FloatingPills() {
             }}
             onPointerDown={(e) => handlePointerDown(e, idx)}
             whileHover={{ scale: 1.05 }}
-            className={`absolute left-0 top-0 cursor-grab active:cursor-grabbing select-none font-mono tracking-[0.1em] border transition-colors duration-300 rounded-full flex items-center justify-center text-center ${
+            className={`absolute left-0 top-0 cursor-grab active:cursor-grabbing select-none font-mono tracking-[0.12em] border transition-all duration-300 flex items-center justify-center text-center ${
               isCircle 
-                ? 'font-sans text-4xl md:text-6xl font-bold leading-none' 
-                : 'text-sm md:text-lg font-bold px-4'
-            } ${
-              pill.type === 'circle' || pill.type === 'circle-arrow'
-                ? 'bg-[#eaeaea] dark:bg-[#eaeaea] text-[#0d0d0e] dark:text-[#0d0d0e] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.12)]'
-                : 'bg-white/10 dark:bg-black/40 text-neutral-900 dark:text-[#eaeaea] border-neutral-300 dark:border-[#eaeaea]/20 backdrop-blur-md'
+                ? 'rounded-full font-sans text-4xl md:text-6xl font-bold leading-none bg-[#eaeaea] text-[#161618] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.12)]' 
+                : isSquircle
+                  ? 'rounded-[16px] text-xs md:text-sm font-normal text-[#eaeaea] border-[#eaeaea]/25 bg-transparent'
+                  : 'rounded-full text-xs md:text-sm font-normal text-[#eaeaea] border-[#eaeaea]/25 bg-transparent'
             }`}
           >
             {pill.text}
