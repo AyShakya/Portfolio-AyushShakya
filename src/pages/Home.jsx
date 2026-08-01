@@ -124,7 +124,7 @@ export default function Home() {
               <img 
                 src="/images/portrait_slats.jpg" 
                 alt="Portrait" 
-                className="w-32 h-32 md:w-36 md:h-36 rounded-3xl object-cover border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm transition-transform duration-300 group-hover/slat:scale-[1.04]"
+                className="w-32 h-32 md:w-36 md:h-36 rounded-none object-cover border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm transition-transform duration-300 group-hover/slat:scale-[1.04]"
               />
             </div>
 
@@ -197,17 +197,17 @@ export default function Home() {
                 }`}
               >
                 <Link to={`/works/${work.id}`} className="block">
-                  <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
+                  <div className="rounded-none overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
                     {work.image ? (
                       <img 
                         src={work.image} 
                         alt={work.title} 
-                        className="w-full h-full object-cover rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                        className="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
                       />
                     ) : (
                       <ImagePlaceholder 
                         description={work.placeholder} 
-                        className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                        className="w-full h-full !min-h-0 !rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
                       />
                     )}
                   </div>

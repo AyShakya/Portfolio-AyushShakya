@@ -76,17 +76,17 @@ export default function Archive() {
           {/* Left Column Archive Cards */}
           {leftColItems.map((item, idx) => (
             <motion.div key={idx} variants={cardVariants} className="group block p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
-              <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-[4/3]">
+              <div className="rounded-none overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-[4/3]">
                 {item.image ? (
                   <img 
                     src={item.image} 
                     alt={item.title} 
-                    className="w-full h-full object-cover rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
                   />
                 ) : (
                   <ImagePlaceholder 
                     description={item.placeholder} 
-                    className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="w-full h-full !min-h-0 !rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
                   />
                 )}
               </div>
@@ -116,17 +116,17 @@ export default function Archive() {
           {/* Right Column Archive Cards */}
           {rightColItems.map((item, idx) => (
             <motion.div key={idx} variants={cardVariants} className="group block p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
-              <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-[4/3]">
+              <div className="rounded-none overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-[4/3]">
                 {item.image ? (
                   <img 
                     src={item.image} 
                     alt={item.title} 
-                    className="w-full h-full object-cover rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
                   />
                 ) : (
                   <ImagePlaceholder 
                     description={item.placeholder} 
-                    className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="w-full h-full !min-h-0 !rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
                   />
                 )}
               </div>
