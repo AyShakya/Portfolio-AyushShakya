@@ -81,39 +81,19 @@ export default function FloatingPills() {
           pill.width = pillW;
           pill.height = pillH;
 
-          // If not initialized, place them at columns and start falling from random top coordinates
+          // If not initialized, randomize initial position and fall parameters
           if (pill.x === 0 && pill.y === 0) {
-            let targetXPercent = 0.5;
-            let dropHeight = -150;
-            
-            if (pill.text === 'CREATIVE DIRECTOR') {
-              targetXPercent = 0.16;
-              dropHeight = -350; // drops later, stacks on arrow
-            } else if (pill.text === '\u2193') {
-              targetXPercent = 0.12;
-              dropHeight = -150; // drops first
-            } else if (pill.text === 'KIX \u25CF') {
-              targetXPercent = 0.35;
-              dropHeight = -220;
-            } else if (pill.text === 'BRAND DESIGNER') {
-              targetXPercent = 0.52;
-              dropHeight = -150; // drops first
-            } else if (pill.text === '*') {
-              targetXPercent = 0.56;
-              dropHeight = -350; // drops later, stacks on BRAND DESIGNER
-            } else if (pill.text === 'AYUSH') {
-              targetXPercent = 0.85;
-              dropHeight = -200;
-            }
+            const targetXPercent = 0.05 + Math.random() * 0.9;
+            const dropHeight = -100 - Math.random() * 300;
 
             // Set initial position
             pill.x = w * targetXPercent - pillW / 2;
             pill.x = Math.max(15, Math.min(w - pillW - 15, pill.x));
-            pill.y = dropHeight - Math.random() * 50;
+            pill.y = dropHeight;
             
-            // Subtle random horizontal velocity so it feels natural, but minimal to prevent scattering
-            pill.vx = -1 + Math.random() * 2;
-            pill.vy = 4 + Math.random() * 3;
+            // Fall strictly vertically downwards: vx = 0 initially
+            pill.vx = 0;
+            pill.vy = 4 + Math.random() * 4;
           }
         });
         setIsReady(true);
@@ -137,13 +117,21 @@ export default function FloatingPills() {
         const pills = pillsRef.current;
         const dragIdx = draggingIndexRef.current;
 
-        // 1. Update positions & velocities
+        // 1. Update positions & velocities with smooth physics falling
         pills.forEach((pill, idx) => {
           if (idx === dragIdx) return; // Managed by pointer events
 
-          pill.vy += 0.35; // Gravity acceleration
+          pill.vy += 0.65; // High gravity for smooth, realistic fall
           pill.vx *= 0.985; // Air friction
           pill.vy *= 0.985;
+
+          // Cap speed to prevent boundary clipping on high velocity throws
+          const speed = Math.sqrt(pill.vx * pill.vx + pill.vy * pill.vy);
+          const maxSpeed = 16;
+          if (speed > maxSpeed) {
+            pill.vx = (pill.vx / speed) * maxSpeed;
+            pill.vy = (pill.vy / speed) * maxSpeed;
+          }
 
           pill.x += pill.vx;
           pill.y += pill.vy;
