@@ -63,7 +63,7 @@ export default function Home() {
   }
 
   const { bio, experiences, works } = data;
-  const allWorks = [works.find(w => w.id === 'n1-widgets'), ...works.filter(w => w.id !== 'n1-widgets')].filter(Boolean);
+  const allWorks = works;
 
   return (
     <div className="w-full py-0 transition-colors duration-300">
@@ -121,9 +121,10 @@ export default function Home() {
 
             {/* Column 3: Portrait Slat Placeholder */}
             <div className="w-full flex justify-center group/slat">
-              <ImagePlaceholder 
-                description="Clean monochromatic slit profile photo card with Spotify logo overlay" 
-                className="w-32 h-32 md:w-36 md:h-36 rounded-3xl !p-2 !min-h-0 transition-transform duration-300 group-hover/slat:scale-[1.04]"
+              <img 
+                src="/images/portrait_slats.jpg" 
+                alt="Portrait" 
+                className="w-32 h-32 md:w-36 md:h-36 rounded-3xl object-cover border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm transition-transform duration-300 group-hover/slat:scale-[1.04]"
               />
             </div>
 
@@ -186,7 +187,6 @@ export default function Home() {
         >
           {allWorks.map((work, idx) => {
             const isLeft = idx % 2 === 0;
-            const isN1 = work.id === 'n1-widgets';
 
             return (
               <motion.div 
@@ -196,35 +196,34 @@ export default function Home() {
                   isLeft ? 'lg:border-r' : ''
                 }`}
               >
-                <Link to={isN1 ? "/works/n1-widgets" : `/works/${work.id}`} className="block">
-                  {isN1 ? (
-                    <div className="bg-neutral-100 dark:bg-neutral-900/30 rounded-[32px] p-6 md:p-8 border border-neutral-200/50 dark:border-neutral-900 flex flex-col md:flex-row items-center justify-center gap-6 shadow-sm overflow-hidden transition-all duration-300 hover:border-neutral-350 dark:hover:border-neutral-800 aspect-video">
-                      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full transition-transform duration-300 group-hover:scale-[1.04]">
-                        <CompassWidget />
-                        <ClockWidget />
-                      </div>
-                      <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.04]">
-                        <WeatherWidget />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
+                <Link to={`/works/${work.id}`} className="block">
+                  <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
+                    {work.image ? (
+                      <img 
+                        src={work.image} 
+                        alt={work.title} 
+                        className="w-full h-full object-cover rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                      />
+                    ) : (
                       <ImagePlaceholder 
                         description={work.placeholder} 
                         className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
                       />
-                    </div>
-                  )}
+                    )}
+                  </div>
                   <div className="flex justify-between items-start mt-6">
-                    <div>
+                    <div className="flex-grow pr-4 text-left">
                       <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
                         {work.title}
                       </h3>
-                      <p className="text-xs text-neutral-500 mt-1 transition-opacity duration-300 opacity-80 group-hover:opacity-100">
-                        {isN1 ? "Branding UI/UX" : work.category}
+                      <p className="text-xs text-neutral-500 mt-1">
+                        {work.category}
+                      </p>
+                      <p className="text-xs text-neutral-400 mt-2 font-sans line-clamp-2 leading-relaxed">
+                        {work.overview}
                       </p>
                     </div>
-                    <span className="text-xs font-mono text-neutral-500">{work.year}</span>
+                    <span className="text-xs font-mono text-neutral-500 shrink-0">{work.year}</span>
                   </div>
                 </Link>
               </motion.div>

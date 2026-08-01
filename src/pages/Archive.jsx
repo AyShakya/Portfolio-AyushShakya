@@ -44,16 +44,9 @@ export default function Archive() {
 
   const { archive } = data;
 
-  // Split items to construct the exact staggered layout:
-  // Left Column on Desktop: Puke Logo, Personal Photography
-  // Right Column on Desktop: Glod Water Cans, Radial Vent, Oscar Olsson
-  const leftColItems = archive.filter(item => 
-    item.title.includes('Puke') || item.title.includes('Personal')
-  );
-  
-  const rightColItems = archive.filter(item => 
-    item.title.includes('Glod') || item.title.includes('Radial') || item.title.includes('OSCAR')
-  );
+  // Split items dynamically by index to distribute all archive items evenly
+  const leftColItems = archive.filter((_, idx) => idx % 2 === 0);
+  const rightColItems = archive.filter((_, idx) => idx % 2 !== 0);
 
   return (
     <div className="w-full py-0 text-left transition-colors duration-300">
@@ -84,10 +77,18 @@ export default function Archive() {
           {leftColItems.map((item, idx) => (
             <motion.div key={idx} variants={cardVariants} className="group block p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
               <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-[4/3]">
-                <ImagePlaceholder 
-                  description={item.placeholder} 
-                  className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
-                />
+                {item.image ? (
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className="w-full h-full object-cover rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                  />
+                ) : (
+                  <ImagePlaceholder 
+                    description={item.placeholder} 
+                    className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                  />
+                )}
               </div>
               <div className="flex justify-between items-start mt-6">
                 <div>
@@ -116,10 +117,18 @@ export default function Archive() {
           {rightColItems.map((item, idx) => (
             <motion.div key={idx} variants={cardVariants} className="group block p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
               <div className="rounded-[32px] overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-[4/3]">
-                <ImagePlaceholder 
-                  description={item.placeholder} 
-                  className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
-                />
+                {item.image ? (
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className="w-full h-full object-cover rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                  />
+                ) : (
+                  <ImagePlaceholder 
+                    description={item.placeholder} 
+                    className="w-full h-full !min-h-0 !rounded-[32px] transition-transform duration-300 group-hover:scale-[1.04]"
+                  />
+                )}
               </div>
               <div className="flex justify-between items-start mt-6">
                 <div>
