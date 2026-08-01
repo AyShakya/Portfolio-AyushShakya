@@ -33,8 +33,19 @@ export function parseMarkdown(mdText) {
 export function loadPortfolioData() {
   // Eager load all markdown files under src/content
   const bioModules = import.meta.glob('../content/bio.md', { query: '?raw', eager: true });
-  const worksModules = import.meta.glob('../content/works/*.md', { query: '?raw', eager: true });
-  const archiveModules = import.meta.glob('../content/archive/*.md', { query: '?raw', eager: true });
+  const worksModules = import.meta.glob('../content/works/**/*.md', { query: '?raw', eager: true });
+  const archiveModules = import.meta.glob('../content/archive/**/*.md', { query: '?raw', eager: true });
+  
+  // Eager load all images under src/content
+  const imageModules = import.meta.glob('../content/**/*.{png,jpg,jpeg,webp,gif}', { eager: true, import: 'default' });
+
+  const getProjectImages = (mdPath) => {
+    const folderPath = mdPath.substring(0, mdPath.lastIndexOf('/') + 1);
+    return Object.keys(imageModules)
+      .filter(imgPath => imgPath.startsWith(folderPath))
+      .sort()
+      .map(imgPath => imageModules[imgPath]);
+  };
 
   // 1. Parse Bio Data
   let bio = {
@@ -83,6 +94,7 @@ export function loadPortfolioData() {
   const works = Object.keys(worksModules).map(path => {
     const rawText = worksModules[path].default;
     const { metadata, content } = parseMarkdown(rawText);
+    const projectImages = getProjectImages(path);
     
     return {
       id: metadata.id || path.split('/').pop().replace('.md', ''),
@@ -94,7 +106,8 @@ export function loadPortfolioData() {
       services: metadata.services ? metadata.services.split('\\n').map(s => s.trim()) : [],
       about: metadata.about || '',
       placeholder: metadata.placeholder || '',
-      image: metadata.image || '',
+      images: projectImages,
+      image: projectImages[0] || '',
       content: content
     };
   });
@@ -117,13 +130,16 @@ export function loadPortfolioData() {
   const archive = Object.keys(archiveModules).map(path => {
     const rawText = archiveModules[path].default;
     const { metadata, content } = parseMarkdown(rawText);
+    const projectImages = getProjectImages(path);
     
     return {
+      id: metadata.id || path.split('/').pop().replace('.md', ''),
       title: metadata.title || '',
       category: metadata.category || '',
       year: metadata.year || '',
       placeholder: metadata.placeholder || '',
-      image: metadata.image || '',
+      images: projectImages,
+      image: projectImages[0] || '',
       content: content
     };
   });

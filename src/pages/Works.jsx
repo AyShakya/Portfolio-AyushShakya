@@ -101,6 +101,132 @@ export default function Works() {
     const nextWork = works[(currentIdx + 1) % works.length];
     const prevWork = works[(currentIdx - 1 + works.length) % works.length];
 
+    const renderImagesGrid = () => {
+      const images = work.images || [];
+      if (images.length === 0) {
+        return (
+          <div className="p-8 md:p-[5vw] w-full flex items-stretch">
+            <ImagePlaceholder 
+              description={work.placeholder}
+              className="w-full h-full !min-h-[300px] !rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
+            />
+          </div>
+        );
+      }
+
+      const count = Math.min(images.length, 6);
+      const visibleImages = images.slice(0, count);
+
+      if (count === 1) {
+        return (
+          <div className="group w-full overflow-hidden flex items-stretch">
+            <img 
+              src={visibleImages[0]} 
+              alt={`${work.title} - 1`} 
+              className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+            />
+          </div>
+        );
+      }
+
+      if (count === 2) {
+        return (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
+            <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
+              <img src={visibleImages[0]} alt={`${work.title} - 1`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+            </div>
+            <div className="group flex items-stretch">
+              <img src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+            </div>
+          </div>
+        );
+      }
+
+      if (count === 3) {
+        return (
+          <div className="flex flex-col gap-0 w-full items-stretch">
+            <div className="group border-b border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
+              <img src={visibleImages[0]} alt={`${work.title} - 1`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.01]" />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
+              <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
+                <img src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              </div>
+              <div className="group flex items-stretch">
+                <img src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      if (count === 4) {
+        return (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
+            <div className="group border-b lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
+              <img src={visibleImages[0]} alt={`${work.title} - 1`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+            </div>
+            <div className="group border-b border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
+              <img src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+            </div>
+            <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
+              <img src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+            </div>
+            <div className="group flex items-stretch">
+              <img src={visibleImages[3]} alt={`${work.title} - 4`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+            </div>
+          </div>
+        );
+      }
+
+      if (count === 5) {
+        return (
+          <div className="flex flex-col gap-0 w-full items-stretch">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch border-b border-neutral-200/50 dark:border-neutral-900">
+              <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
+                <img src={visibleImages[0]} alt={`${work.title} - 1`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              </div>
+              <div className="group flex items-stretch">
+                <img src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 items-stretch">
+              <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
+                <img src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              </div>
+              <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
+                <img src={visibleImages[3]} alt={`${work.title} - 4`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              </div>
+              <div className="group flex items-stretch">
+                <img src={visibleImages[4]} alt={`${work.title} - 5`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
+          {visibleImages.map((img, i) => {
+            const isLeft = i % 2 === 0;
+            const isLastRow = i >= 4;
+            return (
+              <div 
+                key={i} 
+                className={`group flex items-stretch ${
+                  !isLastRow ? 'border-b border-neutral-200/50 dark:border-neutral-900' : 'border-b lg:border-b-0 border-neutral-200/50 dark:border-neutral-900'
+                } ${
+                  isLeft ? 'lg:border-r border-neutral-200/50 dark:border-neutral-900' : ''
+                }`}
+              >
+                <img src={img} alt={`${work.title} - ${i + 1}`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              </div>
+            );
+          })}
+        </div>
+      );
+    };
+
     return (
       <motion.div 
         variants={containerVariants}
@@ -135,50 +261,7 @@ export default function Works() {
 
         {/* Mockups Grid / Full Width Image */}
         <motion.section variants={childVariants} className="w-full border-b border-neutral-200/50 dark:border-neutral-900 overflow-hidden">
-          {!work.image2 && work.image ? (
-            <div className="group w-full overflow-hidden flex items-stretch">
-              <img 
-                src={work.image} 
-                alt={work.title} 
-                className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.01]"
-              />
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
-              <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-                {work.image ? (
-                  <img 
-                    src={work.image} 
-                    alt={work.title} 
-                    className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                  />
-                ) : (
-                  <div className="p-8 md:p-[5vw] w-full">
-                    <ImagePlaceholder 
-                      description={`${work.placeholder} (Primary Perspective)`}
-                      className="w-full h-full !min-h-[300px] !rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="group flex items-stretch">
-                {work.image2 ? (
-                  <img 
-                    src={work.image2} 
-                    alt={`${work.title} Detail`} 
-                    className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                  />
-                ) : (
-                  <div className="p-8 md:p-[5vw] w-full">
-                    <ImagePlaceholder 
-                      description={`Detail closeup shot representing the ${work.title} project framework details.`}
-                      className="w-full h-full !min-h-[300px] !rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+          {renderImagesGrid()}
         </motion.section>
 
         {/* Metadata Details */}
@@ -218,7 +301,7 @@ export default function Works() {
         <motion.div variants={childVariants} className="flex justify-between items-center p-8 md:p-[5vw]">
           <Link 
             to={`/works/${prevWork.id}`}
-            className="text-lg md:text-xl font-bold tracking-widest text-[#161618] dark:text-[#eaeaea] hover:opacity-80 transition-opacity uppercase"
+            className="text-xs md:text-sm font-semibold tracking-wider text-neutral-450 dark:text-neutral-400 hover:text-[#161618] dark:hover:text-[#eaeaea] transition-colors uppercase"
           >
             <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
               &larr; PREV
@@ -226,7 +309,7 @@ export default function Works() {
           </Link>
           <Link 
             to={`/works/${nextWork.id}`}
-            className="text-lg md:text-xl font-bold tracking-widest text-[#161618] dark:text-[#eaeaea] hover:opacity-80 transition-opacity uppercase"
+            className="text-xs md:text-sm font-semibold tracking-wider text-neutral-450 dark:text-neutral-400 hover:text-[#161618] dark:hover:text-[#eaeaea] transition-colors uppercase"
           >
             <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
               NEXT &rarr;
