@@ -8,12 +8,12 @@ export default function FloatingPills() {
 
   // Motion values to update coordinates at 60fps without triggering React renders
   const motionValues = [
-    { x: useMotionValue(0), y: useMotionValue(0), opacity: useMotionValue(0) },
-    { x: useMotionValue(0), y: useMotionValue(0), opacity: useMotionValue(0) },
-    { x: useMotionValue(0), y: useMotionValue(0), opacity: useMotionValue(0) },
-    { x: useMotionValue(0), y: useMotionValue(0), opacity: useMotionValue(0) },
-    { x: useMotionValue(0), y: useMotionValue(0), opacity: useMotionValue(0) },
-    { x: useMotionValue(0), y: useMotionValue(0), opacity: useMotionValue(0) }
+    { x: useMotionValue(0), y: useMotionValue(0), rotate: useMotionValue(0), opacity: useMotionValue(0) },
+    { x: useMotionValue(0), y: useMotionValue(0), rotate: useMotionValue(0), opacity: useMotionValue(0) },
+    { x: useMotionValue(0), y: useMotionValue(0), rotate: useMotionValue(0), opacity: useMotionValue(0) },
+    { x: useMotionValue(0), y: useMotionValue(0), rotate: useMotionValue(0), opacity: useMotionValue(0) },
+    { x: useMotionValue(0), y: useMotionValue(0), rotate: useMotionValue(0), opacity: useMotionValue(0) },
+    { x: useMotionValue(0), y: useMotionValue(0), rotate: useMotionValue(0), opacity: useMotionValue(0) }
   ];
 
   // Physics state stored in a ref for frame-by-frame updates
@@ -26,21 +26,28 @@ export default function FloatingPills() {
     { text: 'AYUSH', type: 'oval-small', w: 110, h: 50, rotate: 0 }
   ].map((pill, idx) => ({
     ...pill,
-    x: 0,
-    y: 0,
+    cx: 0,
+    cy: 0,
     vx: 0,
     vy: 0,
-    mass: pill.type === 'circle' || pill.type === 'circle-arrow' ? 1.0 : 1.8,
-    radius: 0,
+    angle: 0,
+    va: 0,
+    mass: 1.0,
+    inertia: 1.0,
+    restitution: 0.6,
+    isDragging: false,
     width: 0,
     height: 0,
     motionX: motionValues[idx].x,
     motionY: motionValues[idx].y,
+    motionRotate: motionValues[idx].rotate,
     motionOpacity: motionValues[idx].opacity
   })));
 
   const draggingIndexRef = useRef(null);
+  const pointerRef = useRef({ x: 0, y: 0 });
   const pointerOffsetRef = useRef({ x: 0, y: 0 });
+  const dragStartPosRef = useRef({ x: 0, y: 0 });
 
   // Initialize container size and pills layout
   useEffect(() => {
@@ -53,14 +60,15 @@ export default function FloatingPills() {
         setContainerSize({ width: w, height: h });
 
         const isMobile = w < 768;
-        pillsRef.current.forEach((pill) => {
+        const pad = 10;
+
+        pillsRef.current.forEach((pill, idx) => {
           let pillW = pill.w;
           let pillH = pill.h;
           
           if (pill.type === 'circle' || pill.type === 'circle-arrow') {
             pillW = (isMobile ? 48 : 64) * 2;
             pillH = (isMobile ? 48 : 64) * 2;
-            pill.radius = pillW / 2;
           } else {
             if (pill.text === 'AYUSH') {
               pillW = (isMobile ? 80 : 100) * 2;
@@ -74,26 +82,40 @@ export default function FloatingPills() {
               pillW = (isMobile ? 100 : 130) * 2;
             }
             pillH = (isMobile ? 38 : 46) * 2;
-            // Bounding radius is average of width and height / 2 to make capsule stacking look natural
-            pill.radius = (pillW + pillH) / 4;
           }
           
           pill.width = pillW;
           pill.height = pillH;
+          
+          // Mass proportional to area
+          pill.mass = (pillW * pillH) / 1000;
+          // Moment of inertia for a rectangle
+          pill.inertia = (1 / 12) * pill.mass * (pillW * pillW + pillH * pillH);
 
           // If not initialized, randomize initial position and fall parameters
-          if (pill.x === 0 && pill.y === 0) {
-            const targetXPercent = 0.05 + Math.random() * 0.9;
-            const dropHeight = -100 - Math.random() * 300;
+          if (pill.cx === 0 && pill.cy === 0) {
+            const dropHeight = -80; // Same starting Y level for all pills
 
-            // Set initial position
-            pill.x = w * targetXPercent - pillW / 2;
-            pill.x = Math.max(15, Math.min(w - pillW - 15, pill.x));
-            pill.y = dropHeight;
+            // Randomize starting X coordinate within boundaries
+            const minCx = pad + pill.width / 2;
+            const maxCx = w - pad - pill.width / 2;
+            pill.cx = minCx + Math.random() * (maxCx - minCx);
+            pill.cy = dropHeight;
             
-            // Fall strictly vertically downwards: vx = 0 initially
-            pill.vx = 0;
-            pill.vy = 4 + Math.random() * 4;
+            // Fall downwards with slight horizontal variation
+            pill.vx = (Math.random() - 0.5) * 2;
+            pill.vy = 4 + Math.random() * 3;
+            pill.angle = (Math.random() - 0.5) * 0.5;
+            pill.va = (Math.random() - 0.5) * 0.05;
+          } else {
+            // Keep inside new boundaries if resized
+            const minCx = pad + pill.width / 2;
+            const maxCx = w - pad - pill.width / 2;
+            const minCy = pad + pill.height / 2;
+            const maxCy = h - pad - pill.height / 2;
+
+            pill.cx = Math.max(minCx, Math.min(maxCx, pill.cx));
+            pill.cy = Math.max(minCy, Math.min(maxCy, pill.cy));
           }
         });
         setIsReady(true);
@@ -117,140 +139,309 @@ export default function FloatingPills() {
         const pills = pillsRef.current;
         const dragIdx = draggingIndexRef.current;
 
-        // 1. Update positions & velocities with smooth physics falling
-        pills.forEach((pill, idx) => {
-          if (idx === dragIdx) return; // Managed by pointer events
-
-          pill.vy += 0.65; // High gravity for smooth, realistic fall
-          pill.vx *= 0.985; // Air friction
-          pill.vy *= 0.985;
-
-          // Cap speed to prevent boundary clipping on high velocity throws
-          const speed = Math.sqrt(pill.vx * pill.vx + pill.vy * pill.vy);
-          const maxSpeed = 16;
-          if (speed > maxSpeed) {
-            pill.vx = (pill.vx / speed) * maxSpeed;
-            pill.vy = (pill.vy / speed) * maxSpeed;
-          }
-
-          pill.x += pill.vx;
-          pill.y += pill.vy;
-        });
-
-        // 2. Resolve Pill-to-Pill Box Collisions & Enforce strict boundary walls
-        const bounce = 0.55;
+        // Run multiple substeps per frame for physics stability
+        const SUBSTEPS = 4;
+        
+        // Gravity and damping coefficients per substep
+        const gravity = 0.14; // Lighter gravity strength (reduced by ~22%)
+        const friction = 0.995; // Linear damping (air resistance)
+        const angularFriction = 0.992; // Angular damping
+        const bounce = 0.6; // Restitution (bounciness)
         const pad = 10;
 
-        for (let pass = 0; pass < 4; pass++) {
-          // Pass A: Resolve pill-to-pill AABB overlaps
+        // Helper function to compute circles for a pill (capsule approximation)
+        const getPillCircles = (pill) => {
+          const R = pill.height / 2;
+          const W = pill.width;
+          const H = pill.height;
+          const N = Math.max(1, Math.ceil(W / H));
+          const circles = [];
+          const cosA = Math.cos(pill.angle);
+          const sinA = Math.sin(pill.angle);
+
+          if (N === 1) {
+            circles.push({ wx: pill.cx, wy: pill.cy, r: R, rx: 0, ry: 0 });
+          } else {
+            const stepDist = (W - H) / (N - 1);
+            const startX = -(W - H) / 2;
+            for (let k = 0; k < N; k++) {
+              const lx = startX + k * stepDist;
+              const ly = 0;
+              const rx = lx * cosA - ly * sinA;
+              const ry = lx * sinA + ly * cosA;
+              circles.push({ wx: pill.cx + rx, wy: pill.cy + ry, r: R, rx: rx, ry: ry });
+            }
+          }
+          return circles;
+        };
+
+        for (let sub = 0; sub < SUBSTEPS; sub++) {
+          // 1. Update velocities and positions
+          pills.forEach((pill, idx) => {
+            if (idx === dragIdx) {
+              // Dragged pill follows pointer smoothly
+              const targetCx = pointerRef.current.x - pointerOffsetRef.current.x;
+              const targetCy = pointerRef.current.y - pointerOffsetRef.current.y;
+
+              const minCx = pad + 10;
+              const maxCx = w - pad - 10;
+              const minCy = pad + 10;
+              const maxCy = h - pad - 10;
+
+              const clampedTargetCx = Math.max(minCx, Math.min(maxCx, targetCx));
+              const clampedTargetCy = Math.max(minCy, Math.min(maxCy, targetCy));
+
+              const oldCx = pill.cx;
+              const oldCy = pill.cy;
+
+              // Pull towards target
+              pill.cx += (clampedTargetCx - pill.cx) * 0.35;
+              pill.cy += (clampedTargetCy - pill.cy) * 0.35;
+
+              // Enforce boundary walls using pill circles
+              const circles = getPillCircles(pill);
+              circles.forEach((c) => {
+                if (c.wx - c.r < pad) {
+                  pill.cx += pad - (c.wx - c.r);
+                }
+                if (c.wx + c.r > w - pad) {
+                  pill.cx -= (c.wx + c.r) - (w - pad);
+                }
+                if (c.wy + c.r > h - pad) {
+                  pill.cy -= (c.wy + c.r) - (h - pad);
+                }
+                if (pill.cy - pill.height / 2 > pad && c.wy - c.r < pad) {
+                  pill.cy += pad - (c.wy - c.r);
+                }
+              });
+
+              // Set velocity based on actual delta movement
+              pill.vx = pill.cx - oldCx;
+              pill.vy = pill.cy - oldCy;
+
+              // Tilt/rotate based on drag velocity
+              const targetAngle = pill.vx * 0.012;
+              pill.va = (targetAngle - pill.angle) * 0.2;
+              pill.angle += pill.va;
+            } else {
+              // Apply gravity and damping
+              pill.vy += gravity;
+              pill.vx *= friction;
+              pill.vy *= friction;
+              pill.va *= angularFriction;
+
+              // Cap velocities to prevent clipping
+              const maxVel = 18;
+              const speed = Math.sqrt(pill.vx * pill.vx + pill.vy * pill.vy);
+              if (speed > maxVel) {
+                pill.vx = (pill.vx / speed) * maxVel;
+                pill.vy = (pill.vy / speed) * maxVel;
+              }
+
+              const maxAngVel = 0.25;
+              if (Math.abs(pill.va) > maxAngVel) {
+                pill.va = Math.sign(pill.va) * maxAngVel;
+              }
+
+              pill.cx += pill.vx;
+              pill.cy += pill.vy;
+              pill.angle += pill.va;
+            }
+          });
+
+          // 2. Resolve Wall Collisions
+          pills.forEach((pill, idx) => {
+            if (idx === dragIdx) return;
+
+            const circles = getPillCircles(pill);
+            let hasCollidedWithFloor = false;
+
+            circles.forEach((c) => {
+              // Left Wall
+              if (c.wx - c.r < pad) {
+                const depth = pad - (c.wx - c.r);
+                pill.cx += depth;
+                circles.forEach(circle => circle.wx += depth);
+                
+                const rx = c.wx - pill.cx;
+                const ry = c.wy - pill.cy;
+                const vCx = pill.vx - pill.va * ry;
+                if (vCx < 0) {
+                  const rn = -ry;
+                  const j = -(1 + bounce) * vCx / (1 / pill.mass + (rn * rn) / pill.inertia);
+                  pill.vx += j / pill.mass;
+                  pill.va += (j * rn) / pill.inertia;
+                }
+              }
+
+              // Right Wall
+              if (c.wx + c.r > w - pad) {
+                const depth = (c.wx + c.r) - (w - pad);
+                pill.cx -= depth;
+                circles.forEach(circle => circle.wx -= depth);
+
+                const rx = c.wx - pill.cx;
+                const ry = c.wy - pill.cy;
+                const vCx = pill.vx - pill.va * ry;
+                if (vCx > 0) {
+                  const rn = ry;
+                  const j = -(1 + bounce) * (-vCx) / (1 / pill.mass + (rn * rn) / pill.inertia);
+                  pill.vx -= j / pill.mass;
+                  pill.va += (j * rn) / pill.inertia;
+                }
+              }
+
+              // Bottom Wall (Floor)
+              if (c.wy + c.r > h - pad) {
+                const depth = (c.wy + c.r) - (h - pad);
+                pill.cy -= depth;
+                circles.forEach(circle => circle.wy -= depth);
+                hasCollidedWithFloor = true;
+
+                const rx = c.wx - pill.cx;
+                const ry = c.wy - pill.cy;
+                const vCy = pill.vy + pill.va * rx;
+                if (vCy > 0) {
+                  const rn = -rx;
+                  // Settle quicker on floor: slightly lower bounciness
+                  const j = -(1 + bounce * 0.4) * (-vCy) / (1 / pill.mass + (rn * rn) / pill.inertia);
+                  pill.vy -= j / pill.mass;
+                  pill.va += (j * rn) / pill.inertia;
+                }
+              }
+
+              // Top Wall (Ceiling - only if already fully inside)
+              if (pill.cy - pill.height / 2 > pad && c.wy - c.r < pad) {
+                const depth = pad - (c.wy - c.r);
+                pill.cy += depth;
+                circles.forEach(circle => circle.wy += depth);
+
+                const rx = c.wx - pill.cx;
+                const ry = c.wy - pill.cy;
+                const vCy = pill.vy + pill.va * rx;
+                if (vCy < 0) {
+                  const rn = rx;
+                  const j = -(1 + bounce) * vCy / (1 / pill.mass + (rn * rn) / pill.inertia);
+                  pill.vy += j / pill.mass;
+                  pill.va += (j * rn) / pill.inertia;
+                }
+              }
+            });
+
+            // Extra friction on the ground to prevent infinite sliding
+            if (hasCollidedWithFloor) {
+              pill.vx *= 0.94;
+              pill.va *= 0.92;
+            }
+          });
+
+          // 3. Resolve Pill-to-Pill Collisions
           for (let i = 0; i < pills.length; i++) {
             for (let j = i + 1; j < pills.length; j++) {
               const p1 = pills[i];
               const p2 = pills[j];
 
-              // Bounding box bounds
-              const minX1 = p1.x;
-              const maxX1 = p1.x + p1.width;
-              const minY1 = p1.y;
-              const maxY1 = p1.y + p1.height;
+              const circles1 = getPillCircles(p1);
+              const circles2 = getPillCircles(p2);
 
-              const minX2 = p2.x;
-              const maxX2 = p2.x + p2.width;
-              const minY2 = p2.y;
-              const maxY2 = p2.y + p2.height;
+              circles1.forEach((c1) => {
+                circles2.forEach((c2) => {
+                  const dx = c1.wx - c2.wx;
+                  const dy = c1.wy - c2.wy;
+                  const distSq = dx * dx + dy * dy;
+                  const minDist = c1.r + c2.r;
 
-              // Check box intersection
-              const overlapX = Math.min(maxX1, maxX2) - Math.max(minX1, minX2);
-              const overlapY = Math.min(maxY1, maxY2) - Math.max(minY1, minY2);
+                  if (distSq < minDist * minDist) {
+                    const dist = Math.sqrt(distSq) || 0.001;
+                    const nx = dx / dist;
+                    const ny = dy / dist;
+                    const depth = minDist - dist;
 
-              if (overlapX > 0 && overlapY > 0) {
-                let nx = 0;
-                let ny = 0;
-                let overlap = 0;
+                    const invMass1 = (i === dragIdx) ? 0 : 1 / p1.mass;
+                    const invInertia1 = (i === dragIdx) ? 0 : 1 / p1.inertia;
+                    const invMass2 = (j === dragIdx) ? 0 : 1 / p2.mass;
+                    const invInertia2 = (j === dragIdx) ? 0 : 1 / p2.inertia;
 
-                // Push along axis of minimum penetration
-                if (overlapX < overlapY) {
-                  overlap = overlapX;
-                  nx = (p1.x + p1.width / 2 < p2.x + p2.width / 2) ? 1 : -1;
-                } else {
-                  overlap = overlapY;
-                  ny = (p1.y + p1.height / 2 < p2.y + p2.height / 2) ? 1 : -1;
-                }
+                    const totalInvMass = invMass1 + invMass2;
+                    if (totalInvMass === 0) return;
 
-                // Resolve overlaps
-                if (i === dragIdx) {
-                  p2.x += nx * overlap;
-                  p2.y += ny * overlap;
-                  p2.vx += nx * 1.5;
-                  p2.vy += ny * 1.5;
-                } else if (j === dragIdx) {
-                  p1.x -= nx * overlap;
-                  p1.y -= ny * overlap;
-                  p1.vx -= nx * 1.5;
-                  p1.vy -= ny * 1.5;
-                } else {
-                  const totalMass = p1.mass + p2.mass;
-                  const ratio1 = p2.mass / totalMass;
-                  const ratio2 = p1.mass / totalMass;
+                    // Positional correction (Baumgarte)
+                    const percent = 0.45;
+                    const slop = 0.05;
+                    const correctionAmount = Math.max(depth - slop, 0) / totalInvMass * percent;
+                    const correctionX = correctionAmount * nx;
+                    const correctionY = correctionAmount * ny;
 
-                  p1.x -= nx * overlap * ratio1;
-                  p1.y -= ny * overlap * ratio1;
-                  p2.x += nx * overlap * ratio2;
-                  p2.y += ny * overlap * ratio2;
+                    if (i !== dragIdx) {
+                      p1.cx += correctionX * invMass1;
+                      p1.cy += correctionY * invMass1;
+                      circles1.forEach(circle => {
+                        circle.wx += correctionX * invMass1;
+                        circle.wy += correctionY * invMass1;
+                      });
+                    }
+                    if (j !== dragIdx) {
+                      p2.cx -= correctionX * invMass2;
+                      p2.cy -= correctionY * invMass2;
+                      circles2.forEach(circle => {
+                        circle.wx -= correctionX * invMass2;
+                        circle.wy -= correctionY * invMass2;
+                      });
+                    }
 
-                  // Elastic velocity exchange
-                  const rvx = p2.vx - p1.vx;
-                  const rvy = p2.vy - p1.vy;
-                  const velAlongNormal = rvx * nx + rvy * ny;
+                    // Contact point offsets from centers
+                    const contactX = c2.wx + nx * c2.r;
+                    const contactY = c2.wy + ny * c2.r;
 
-                  if (velAlongNormal < 0) {
-                    const restitution = 0.5;
-                    const impulse = -(1 + restitution) * velAlongNormal / (1 / p1.mass + 1 / p2.mass);
-                    p1.vx -= (impulse / p1.mass) * nx;
-                    p1.vy -= (impulse / p1.mass) * ny;
-                    p2.vx += (impulse / p2.mass) * nx;
-                    p2.vy += (impulse / p2.mass) * ny;
+                    const r1x = contactX - p1.cx;
+                    const r1y = contactY - p1.cy;
+                    const r2x = contactX - p2.cx;
+                    const r2y = contactY - p2.cy;
+
+                    const v1x = p1.vx - p1.va * r1y;
+                    const v1y = p1.vy + p1.va * r1x;
+                    const v2x = p2.vx - p2.va * r2y;
+                    const v2y = p2.vy + p2.va * r2x;
+
+                    const rvx = v1x - v2x;
+                    const rvy = v1y - v2y;
+                    const velAlongNormal = rvx * nx + rvy * ny;
+
+                    if (velAlongNormal < 0) { // Moving towards each other
+                      const rn1 = r1x * ny - r1y * nx;
+                      const rn2 = r2x * ny - r2y * nx;
+
+                      const e = 0.55; // Restitution
+                      const denom = invMass1 + invMass2 + (rn1 * rn1) * invInertia1 + (rn2 * rn2) * invInertia2;
+                      const impulse = -(1 + e) * velAlongNormal / denom;
+
+                      if (i !== dragIdx) {
+                        p1.vx += impulse * invMass1 * nx;
+                        p1.vy += impulse * invMass1 * ny;
+                        p1.va += impulse * rn1 * invInertia1;
+                      }
+                      if (j !== dragIdx) {
+                        p2.vx -= impulse * invMass2 * nx;
+                        p2.vy -= impulse * invMass2 * ny;
+                        p2.va -= impulse * rn2 * invInertia2;
+                      }
+                    }
                   }
-                }
-              }
+                });
+              });
             }
           }
-
-          // Pass B: Enforce boundaries immediately
-          pills.forEach((pill, idx) => {
-            if (idx === dragIdx) return;
-
-            // Left Wall
-            if (pill.x < pad) {
-              pill.x = pad;
-              pill.vx = -pill.vx * bounce;
-            }
-            // Right Wall
-            if (pill.x > w - pill.width - pad) {
-              pill.x = w - pill.width - pad;
-              pill.vx = -pill.vx * bounce;
-            }
-            // Top Wall
-            if (pill.y < pad) {
-              pill.y = pad;
-              pill.vy = -pill.vy * bounce;
-            }
-            // Bottom Wall
-            if (pill.y > h - pill.height - pad) {
-              pill.y = h - pill.height - pad;
-              pill.vy = -pill.vy * 0.45; // settle quicker
-              pill.vx *= 0.93; // ground friction
-            }
-          });
         }
 
-        // 3. Sync positions and increment opacities
+        // 4. Sync positions and increment opacities
         pills.forEach((pill) => {
           const op = pill.motionOpacity.get();
           if (op < 1) pill.motionOpacity.set(op + 0.035);
 
-          pill.motionX.set(pill.x);
-          pill.motionY.set(pill.y);
+          // Update motion values
+          pill.motionX.set(pill.cx - pill.width / 2);
+          pill.motionY.set(pill.cy - pill.height / 2);
+          pill.motionRotate.set(pill.angle * (180 / Math.PI));
         });
       }
 
@@ -266,18 +457,22 @@ export default function FloatingPills() {
     e.preventDefault();
     const pill = pillsRef.current[index];
     draggingIndexRef.current = index;
+    pill.isDragging = true;
 
     const rect = containerRef.current.getBoundingClientRect();
     const pointerX = e.clientX - rect.left;
     const pointerY = e.clientY - rect.top;
 
+    pointerRef.current = { x: pointerX, y: pointerY };
+    dragStartPosRef.current = { x: pointerX, y: pointerY };
     pointerOffsetRef.current = {
-      x: pointerX - pill.x,
-      y: pointerY - pill.y
+      x: pointerX - pill.cx,
+      y: pointerY - pill.cy
     };
 
     pill.vx = 0;
     pill.vy = 0;
+    pill.va = 0;
   };
 
   useEffect(() => {
@@ -285,30 +480,31 @@ export default function FloatingPills() {
       const idx = draggingIndexRef.current;
       if (idx === null || !containerRef.current) return;
 
-      const pill = pillsRef.current[idx];
       const rect = containerRef.current.getBoundingClientRect();
-
       const pointerX = e.clientX - rect.left;
       const pointerY = e.clientY - rect.top;
 
-      let targetX = pointerX - pointerOffsetRef.current.x;
-      let targetY = pointerY - pointerOffsetRef.current.y;
-
-      const w = containerSize.width;
-      const h = containerSize.height;
-      const pad = 10;
-
-      targetX = Math.max(pad, Math.min(w - pill.width - pad, targetX));
-      targetY = Math.max(pad, Math.min(h - pill.height - pad, targetY));
-
-      pill.vx = (targetX - pill.x) * 0.75;
-      pill.vy = (targetY - pill.y) * 0.75;
-
-      pill.x = targetX;
-      pill.y = targetY;
+      pointerRef.current = { x: pointerX, y: pointerY };
     };
 
     const handlePointerUp = () => {
+      const idx = draggingIndexRef.current;
+      if (idx !== null) {
+        const pill = pillsRef.current[idx];
+        pill.isDragging = false;
+
+        // Check if it's a quick click on the down arrow
+        const dx = pointerRef.current.x - dragStartPosRef.current.x;
+        const dy = pointerRef.current.y - dragStartPosRef.current.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 5 && (pill.type === 'circle-arrow' || pill.text === '\u2193')) {
+          window.scrollTo({
+            top: window.innerHeight * 0.85,
+            behavior: 'smooth'
+          });
+        }
+      }
       draggingIndexRef.current = null;
     };
 
@@ -318,7 +514,7 @@ export default function FloatingPills() {
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
     };
-  }, [containerSize]);
+  }, []);
 
   return (
     <div 
@@ -336,18 +532,18 @@ export default function FloatingPills() {
               x: pill.motionX,
               y: pill.motionY,
               opacity: pill.motionOpacity,
-              rotate: pill.rotate || 0,
+              rotate: pill.motionRotate,
               width: pill.width,
               height: pill.height
             }}
             onPointerDown={(e) => handlePointerDown(e, idx)}
             whileHover={{ scale: 1.05 }}
-            className={`absolute left-0 top-0 cursor-grab active:cursor-grabbing select-none font-mono tracking-[0.12em] border transition-all duration-300 flex items-center justify-center text-center ${
+            className={`absolute left-0 top-0 cursor-grab active:cursor-grabbing select-none font-mono tracking-[0.12em] border flex items-center justify-center text-center transition-[border-color,background-color,box-shadow] duration-300 ${
               isCircle 
                 ? 'rounded-full font-sans text-4xl md:text-6xl font-bold leading-none bg-[#eaeaea] text-[#161618] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.12)]' 
                 : isSquircle
-                  ? 'rounded-[16px] text-xs md:text-sm font-normal text-[#eaeaea] border-[#eaeaea]/25 bg-transparent'
-                  : 'rounded-full text-xs md:text-sm font-normal text-[#eaeaea] border-[#eaeaea]/25 bg-transparent'
+                  ? 'rounded-[16px] text-xs md:text-sm font-normal text-[#eaeaea] border-[#eaeaea]/25 bg-transparent hover:bg-white/5 hover:border-white/40 shadow-sm'
+                  : 'rounded-full text-xs md:text-sm font-normal text-[#eaeaea] border-[#eaeaea]/25 bg-transparent hover:bg-white/5 hover:border-white/40 shadow-sm'
             }`}
           >
             {pill.text}
