@@ -48,7 +48,7 @@ export default function Navbar() {
         to="/" 
         className="text-lg md:text-xl font-bold tracking-tight text-[#eaeaea] dark:text-[#eaeaea] font-sans hover:opacity-80 transition-opacity"
       >
-        MARYA©
+        shamky©
       </Link>
 
       {/* Nav Links */}

@@ -89,7 +89,7 @@ export default function Footer() {
         {/* Right Column - Live Clock */}
         <div className="flex flex-col gap-2 md:items-end text-left md:text-right">
           <p className="text-xs uppercase tracking-widest text-neutral-500">Local Time</p>
-          <p className="text-lg md:text-xl font-bold font-pixel tracking-wide text-neutral-900 dark:text-neutral-100 select-none">
+          <p className="text-lg md:text-xl font-bold font-pixel tracking-wide text-neutral-700 dark:text-neutral-400 select-none">
             {timeStr || '12:00:00 AM'}
           </p>
         </div>
