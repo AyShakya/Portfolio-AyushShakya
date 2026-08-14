@@ -81,7 +81,7 @@ export default function Home() {
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-            className="text-[15.15vw] font-extrabold tracking-[-0.06em] leading-[0.8] select-none text-[#eaeaea] dark:text-[#eaeaea] font-heading w-full uppercase block whitespace-nowrap"
+            className="text-[15.8vw] font-extrabold tracking-[-0.06em] leading-[0.8] select-none text-[#eaeaea] dark:text-[#eaeaea] font-heading w-full uppercase block whitespace-nowrap"
           >
             AYUSH SHAKYA
           </motion.h1>
