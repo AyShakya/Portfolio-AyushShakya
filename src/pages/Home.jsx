@@ -10,6 +10,7 @@ import ClockWidget from '../components/ClockWidget';
 import WeatherWidget from '../components/WeatherWidget';
 import ImagePlaceholder from '../components/ImagePlaceholder';
 import PhoneWidgetDashboard from '../components/PhoneWidgetDashboard';
+import TransitionImage from '../components/TransitionImage';
 
 // Variants for Scroll Entrance Animations
 const containerVariants = {
@@ -46,21 +47,7 @@ const scrollRevealVariants = {
 };
 
 export default function Home() {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    // Load decentralized markdown data
-    const portfolioData = loadPortfolioData();
-    setData(portfolioData);
-  }, []);
-
-  if (!data) {
-    return (
-      <div className="w-full min-h-[60vh] flex items-center justify-center font-mono text-sm text-neutral-500">
-        Loading portfolio specs...
-      </div>
-    );
-  }
+  const [data] = useState(() => loadPortfolioData());
 
   const { bio, experiences, works } = data;
   const allWorks = works;
@@ -195,12 +182,13 @@ export default function Home() {
                   isLeft ? 'lg:border-r' : ''
                 }`}
               >
-                <Link to={`/works/${work.id}`} className="block">
+                <Link to={`/works/${work.id}`} viewTransition className="block">
                   <div className="rounded-none overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
                     {work.image ? (
-                      <img 
+                      <TransitionImage 
                         src={work.image} 
                         alt={work.title} 
+                        style={{ viewTransitionName: `project-image-${work.id}` }}
                         className="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
                       />
                     ) : (
@@ -212,7 +200,10 @@ export default function Home() {
                   </div>
                   <div className="flex justify-between items-start mt-6">
                     <div className="flex-grow pr-4 text-left">
-                      <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
+                      <h3 
+                        style={{ viewTransitionName: `project-title-${work.id}` }}
+                        className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block"
+                      >
                         {work.title}
                       </h3>
                       <p className="text-xs text-neutral-500 mt-1">
@@ -244,6 +235,7 @@ export default function Home() {
         <div className="p-8 md:p-[5vw] border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex flex-col justify-between gap-8">
           <Link 
             to="/archive" 
+            viewTransition
             className="text-lg md:text-xl font-medium underline text-neutral-900 dark:text-neutral-100 hover:opacity-80 transition-opacity inline-block"
           >
             <motion.span

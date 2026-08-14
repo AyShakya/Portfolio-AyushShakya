@@ -46,6 +46,7 @@ export default function Navbar() {
       {/* Logo */}
       <Link 
         to="/" 
+        viewTransition
         className="text-lg md:text-xl font-bold tracking-tight text-[#eaeaea] dark:text-[#eaeaea] font-sans hover:opacity-80 transition-opacity"
       >
         shamky©
@@ -59,6 +60,7 @@ export default function Navbar() {
             <Link
               key={link.path}
               to={link.path}
+              viewTransition
               className={`relative py-1 text-xs md:text-sm font-medium tracking-[0.2em] transition-colors duration-250 ${
                 active ? 'text-[#eaeaea]' : 'text-neutral-500 hover:text-[#eaeaea]'
               }`}

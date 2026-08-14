@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { loadPortfolioData } from '../utils/contentLoader';
 import ImagePlaceholder from '../components/ImagePlaceholder';
+import TransitionImage from '../components/TransitionImage';
 
 // Variants for Fade + Scale + Stagger + Play Once Entrance
 const gridContainerVariants = {
@@ -27,20 +28,7 @@ const cardVariants = {
 };
 
 export default function Archive() {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    // Load decentralized markdown data
-    setData(loadPortfolioData());
-  }, []);
-
-  if (!data) {
-    return (
-      <div className="w-full min-h-[60vh] flex items-center justify-center font-mono text-sm text-neutral-500">
-        Loading archive specs...
-      </div>
-    );
-  }
+  const [data] = useState(() => loadPortfolioData());
 
   const { archive } = data;
 
@@ -78,7 +66,7 @@ export default function Archive() {
             <motion.div key={idx} variants={cardVariants} className="group block p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
               <div className="rounded-none overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-[4/3]">
                 {item.image ? (
-                  <img 
+                  <TransitionImage 
                     src={item.image} 
                     alt={item.title} 
                     className="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
@@ -118,7 +106,7 @@ export default function Archive() {
             <motion.div key={idx} variants={cardVariants} className="group block p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900">
               <div className="rounded-none overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-[4/3]">
                 {item.image ? (
-                  <img 
+                  <TransitionImage 
                     src={item.image} 
                     alt={item.title} 
                     className="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-[1.04]"

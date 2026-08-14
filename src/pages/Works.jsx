@@ -7,6 +7,7 @@ import ClockWidget from '../components/ClockWidget';
 import WeatherWidget from '../components/WeatherWidget';
 import ImagePlaceholder from '../components/ImagePlaceholder';
 import PhoneWidgetDashboard from '../components/PhoneWidgetDashboard';
+import TransitionImage from '../components/TransitionImage';
 
 // Framer Motion Variants for Staggered Details Reveal
 const containerVariants = {
@@ -66,20 +67,7 @@ const titleRevealVariants = {
 
 export default function Works() {
   const { projectId } = useParams();
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    // Load decentralized markdown data
-    setData(loadPortfolioData());
-  }, []);
-
-  if (!data) {
-    return (
-      <div className="w-full min-h-[60vh] flex items-center justify-center font-mono text-sm text-neutral-500">
-        Loading project specs...
-      </div>
-    );
-  }
+  const [data] = useState(() => loadPortfolioData());
 
   const { works } = data;
 
@@ -120,9 +108,10 @@ export default function Works() {
       if (count === 1) {
         return (
           <div className="group w-full overflow-hidden flex items-stretch">
-            <img 
+            <TransitionImage 
               src={visibleImages[0]} 
               alt={`${work.title} - 1`} 
+              style={{ viewTransitionName: `project-image-${work.id}` }}
               className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.01]"
             />
           </div>
@@ -133,10 +122,15 @@ export default function Works() {
         return (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
             <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-              <img src={visibleImages[0]} alt={`${work.title} - 1`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              <TransitionImage 
+                src={visibleImages[0]} 
+                alt={`${work.title} - 1`} 
+                style={{ viewTransitionName: `project-image-${work.id}` }}
+                className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" 
+              />
             </div>
             <div className="group flex items-stretch">
-              <img src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
             </div>
           </div>
         );
@@ -146,14 +140,19 @@ export default function Works() {
         return (
           <div className="flex flex-col gap-0 w-full items-stretch">
             <div className="group border-b border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-              <img src={visibleImages[0]} alt={`${work.title} - 1`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.01]" />
+              <TransitionImage 
+                src={visibleImages[0]} 
+                alt={`${work.title} - 1`} 
+                style={{ viewTransitionName: `project-image-${work.id}` }}
+                className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.01]" 
+              />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
               <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-                <img src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
               </div>
               <div className="group flex items-stretch">
-                <img src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
               </div>
             </div>
           </div>
@@ -164,16 +163,21 @@ export default function Works() {
         return (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
             <div className="group border-b lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-              <img src={visibleImages[0]} alt={`${work.title} - 1`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              <TransitionImage 
+                src={visibleImages[0]} 
+                alt={`${work.title} - 1`} 
+                style={{ viewTransitionName: `project-image-${work.id}` }}
+                className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" 
+              />
             </div>
             <div className="group border-b border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-              <img src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
             </div>
             <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-              <img src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              <TransitionImage src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
             </div>
             <div className="group flex items-stretch">
-              <img src={visibleImages[3]} alt={`${work.title} - 4`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              <TransitionImage src={visibleImages[3]} alt={`${work.title} - 4`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
             </div>
           </div>
         );
@@ -184,21 +188,26 @@ export default function Works() {
           <div className="flex flex-col gap-0 w-full items-stretch">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch border-b border-neutral-200/50 dark:border-neutral-900">
               <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-                <img src={visibleImages[0]} alt={`${work.title} - 1`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage 
+                  src={visibleImages[0]} 
+                  alt={`${work.title} - 1`} 
+                  style={{ viewTransitionName: `project-image-${work.id}` }}
+                  className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" 
+                />
               </div>
               <div className="group flex items-stretch">
-                <img src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
               </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 items-stretch">
               <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-                <img src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
               </div>
               <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-                <img src={visibleImages[3]} alt={`${work.title} - 4`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[3]} alt={`${work.title} - 4`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
               </div>
               <div className="group flex items-stretch">
-                <img src={visibleImages[4]} alt={`${work.title} - 5`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[4]} alt={`${work.title} - 5`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
               </div>
             </div>
           </div>
@@ -219,7 +228,16 @@ export default function Works() {
                   isLeft ? 'lg:border-r border-neutral-200/50 dark:border-neutral-900' : ''
                 }`}
               >
-                <img src={img} alt={`${work.title} - ${i + 1}`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                {i === 0 ? (
+                  <TransitionImage 
+                    src={img} 
+                    alt={`${work.title} - ${i + 1}`} 
+                    style={{ viewTransitionName: `project-image-${work.id}` }}
+                    className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" 
+                  />
+                ) : (
+                  <TransitionImage src={img} alt={`${work.title} - ${i + 1}`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                )}
               </div>
             );
           })}
@@ -238,6 +256,7 @@ export default function Works() {
         <motion.div variants={childVariants} className="p-8 md:p-[5vw] pb-0">
           <Link 
             to="/" 
+            viewTransition
             className="text-xs uppercase tracking-widest text-neutral-500 hover:text-[#161618] dark:hover:text-[#eaeaea] inline-block transition-colors"
           >
             <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
@@ -249,7 +268,10 @@ export default function Works() {
         {/* Header Grid */}
         <motion.section variants={childVariants} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[5vw] my-0 p-8 md:p-[5vw] border-b border-neutral-200/50 dark:border-neutral-900 items-center">
           <div className="lg:col-span-7 xl:col-span-8">
-            <h1 className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-[-0.04em] text-[#161618] dark:text-[#eaeaea] uppercase leading-[0.9] break-words">
+            <h1 
+              style={{ viewTransitionName: `project-title-${work.id}` }}
+              className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-[-0.04em] text-[#161618] dark:text-[#eaeaea] uppercase leading-[0.9] break-words"
+            >
               {work.title}
             </h1>
           </div>
@@ -303,6 +325,7 @@ export default function Works() {
         <motion.div variants={childVariants} className="flex justify-between items-center p-8 md:p-[5vw]">
           <Link 
             to={`/works/${prevWork.id}`}
+            viewTransition
             className="text-xs md:text-sm font-semibold tracking-wider text-neutral-450 dark:text-neutral-400 hover:text-[#161618] dark:hover:text-[#eaeaea] transition-colors uppercase"
           >
             <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
@@ -311,6 +334,7 @@ export default function Works() {
           </Link>
           <Link 
             to={`/works/${nextWork.id}`}
+            viewTransition
             className="text-xs md:text-sm font-semibold tracking-wider text-neutral-450 dark:text-neutral-400 hover:text-[#161618] dark:hover:text-[#eaeaea] transition-colors uppercase"
           >
             <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
@@ -366,12 +390,13 @@ export default function Works() {
                 isLeft ? 'lg:border-r' : ''
               }`}
             >
-              <Link to={`/works/${work.id}`} className="block">
+              <Link to={`/works/${work.id}`} viewTransition className="block">
                 <div className="rounded-none overflow-hidden border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm flex items-stretch aspect-video">
                   {work.image ? (
-                    <img 
+                    <TransitionImage 
                       src={work.image} 
                       alt={work.title} 
+                      style={{ viewTransitionName: `project-image-${work.id}` }}
                       className="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
                     />
                   ) : (
@@ -383,7 +408,10 @@ export default function Works() {
                 </div>
                 <div className="flex justify-between items-start mt-6">
                   <div className="flex-grow pr-4 text-left">
-                    <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block">
+                    <h3 
+                      style={{ viewTransitionName: `project-title-${work.id}` }}
+                      className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block"
+                    >
                       {work.title}
                     </h3>
                     <p className="text-xs text-neutral-500 mt-1">
