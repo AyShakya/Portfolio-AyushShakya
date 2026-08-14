@@ -143,10 +143,9 @@ export default function FloatingPills() {
         const SUBSTEPS = 4;
         
         // Gravity and damping coefficients per substep
-        const gravity = 0.14; // Lighter gravity strength (reduced by ~22%)
-        const friction = 0.995; // Linear damping (air resistance)
+        const gravity = 0.08; // Adjusted downward acceleration
+        const friction = 0.96; // Adjusted air resistance damping
         const angularFriction = 0.992; // Angular damping
-        const bounce = 0.6; // Restitution (bounciness)
         const pad = 10;
 
         // Helper function to compute circles for a pill (capsule approximation)
@@ -179,50 +178,96 @@ export default function FloatingPills() {
           // 1. Update velocities and positions
           pills.forEach((pill, idx) => {
             if (idx === dragIdx) {
-              // Dragged pill follows pointer smoothly
-              const targetCx = pointerRef.current.x - pointerOffsetRef.current.x;
-              const targetCy = pointerRef.current.y - pointerOffsetRef.current.y;
+              // Apply gravity to the dragged pill so it hangs/swings down
+              pill.vy += gravity;
+              pill.vx *= friction;
+              pill.vy *= friction;
+              pill.va *= angularFriction;
 
-              const minCx = pad + 10;
-              const maxCx = w - pad - 10;
-              const minCy = pad + 10;
-              const maxCy = h - pad - 10;
+              // Calculate mouse/spring force at the local grab point
+              const targetX = pointerRef.current.x;
+              const targetY = pointerRef.current.y;
 
-              const clampedTargetCx = Math.max(minCx, Math.min(maxCx, targetCx));
-              const clampedTargetCy = Math.max(minCy, Math.min(maxCy, targetCy));
+              const lx = pill.dragLocalX || 0;
+              const ly = pill.dragLocalY || 0;
 
-              const oldCx = pill.cx;
-              const oldCy = pill.cy;
+              const cosA = Math.cos(pill.angle);
+              const sinA = Math.sin(pill.angle);
 
-              // Pull towards target
-              pill.cx += (clampedTargetCx - pill.cx) * 0.35;
-              pill.cy += (clampedTargetCy - pill.cy) * 0.35;
+              // World coordinate offset of the grab point from center of mass
+              const rx = lx * cosA - ly * sinA;
+              const ry = lx * sinA + ly * cosA;
 
-              // Enforce boundary walls using pill circles
+              // World position of the grab point
+              const wx = pill.cx + rx;
+              const wy = pill.cy + ry;
+
+              // Velocity of the grabbed point on the pill
+              const vpx = pill.vx - pill.va * ry;
+              const vpy = pill.vy + pill.va * rx;
+
+              // Spring coefficients (kSpring = stiffness, kDamp = damping)
+              const kSpring = 0.08;
+              const kDamp = 0.15;
+
+              // Acceleration applied at the grab point
+              const ax = kSpring * (targetX - wx) - kDamp * vpx;
+              const ay = kSpring * (targetY - wy) - kDamp * vpy;
+
+              // Update center of mass velocities
+              pill.vx += ax;
+              pill.vy += ay;
+
+              // Update angular velocity based on torque
+              const inertiaRatio = (pill.width * pill.width + pill.height * pill.height) / 12;
+              const alpha = (rx * ay - ry * ax) / inertiaRatio;
+              pill.va += alpha;
+
+              // Cap velocities to prevent clipping/excessive speed
+              const maxVel = 18;
+              const speed = Math.sqrt(pill.vx * pill.vx + pill.vy * pill.vy);
+              if (speed > maxVel) {
+                pill.vx = (pill.vx / speed) * maxVel;
+                pill.vy = (pill.vy / speed) * maxVel;
+              }
+
+              const maxAngVel = 0.25;
+              if (Math.abs(pill.va) > maxAngVel) {
+                pill.va = Math.sign(pill.va) * maxAngVel;
+              }
+
+              // Update coordinates
+              pill.cx += pill.vx;
+              pill.cy += pill.vy;
+              pill.angle += pill.va;
+
+              // Enforce boundary walls using pill circles (to keep it inside container boundaries)
+              let pushLeft = 0;
+              let pushRight = 0;
+              let pushTop = 0;
+              let pushBottom = 0;
+
               const circles = getPillCircles(pill);
               circles.forEach((c) => {
                 if (c.wx - c.r < pad) {
-                  pill.cx += pad - (c.wx - c.r);
+                  pushLeft = Math.max(pushLeft, pad - (c.wx - c.r));
                 }
                 if (c.wx + c.r > w - pad) {
-                  pill.cx -= (c.wx + c.r) - (w - pad);
+                  pushRight = Math.max(pushRight, (c.wx + c.r) - (w - pad));
                 }
                 if (c.wy + c.r > h - pad) {
-                  pill.cy -= (c.wy + c.r) - (h - pad);
+                  pushBottom = Math.max(pushBottom, (c.wy + c.r) - (h - pad));
                 }
                 if (pill.cy - pill.height / 2 > pad && c.wy - c.r < pad) {
-                  pill.cy += pad - (c.wy - c.r);
+                  pushTop = Math.max(pushTop, pad - (c.wy - c.r));
                 }
               });
 
-              // Set velocity based on actual delta movement
-              pill.vx = pill.cx - oldCx;
-              pill.vy = pill.cy - oldCy;
+              if (pushLeft > 0) pill.cx += pushLeft;
+              else if (pushRight > 0) pill.cx -= pushRight;
 
-              // Tilt/rotate based on drag velocity
-              const targetAngle = pill.vx * 0.012;
-              pill.va = (targetAngle - pill.angle) * 0.2;
-              pill.angle += pill.va;
+              if (pushBottom > 0) pill.cy -= pushBottom;
+              else if (pushTop > 0) pill.cy += pushTop;
             } else {
               // Apply gravity and damping
               pill.vy += gravity;
@@ -254,16 +299,59 @@ export default function FloatingPills() {
             if (idx === dragIdx) return;
 
             const circles = getPillCircles(pill);
-            let hasCollidedWithFloor = false;
+            let maxDepth = 0;
+            let collisionType = ''; // 'left', 'right', 'floor', 'ceiling'
+            let collidedCircle = null;
 
             circles.forEach((c) => {
               // Left Wall
               if (c.wx - c.r < pad) {
                 const depth = pad - (c.wx - c.r);
+                if (depth > maxDepth) {
+                  maxDepth = depth;
+                  collisionType = 'left';
+                  collidedCircle = c;
+                }
+              }
+
+              // Right Wall
+              if (c.wx + c.r > w - pad) {
+                const depth = (c.wx + c.r) - (w - pad);
+                if (depth > maxDepth) {
+                  maxDepth = depth;
+                  collisionType = 'right';
+                  collidedCircle = c;
+                }
+              }
+
+              // Bottom Wall (Floor)
+              if (c.wy + c.r > h - pad) {
+                const depth = (c.wy + c.r) - (h - pad);
+                if (depth > maxDepth) {
+                  maxDepth = depth;
+                  collisionType = 'floor';
+                  collidedCircle = c;
+                }
+              }
+
+              // Top Wall (Ceiling - only if already fully inside)
+              if (pill.cy - pill.height / 2 > pad && c.wy - c.r < pad) {
+                const depth = pad - (c.wy - c.r);
+                if (depth > maxDepth) {
+                  maxDepth = depth;
+                  collisionType = 'ceiling';
+                  collidedCircle = c;
+                }
+              }
+            });
+
+            if (collisionType !== '') {
+              const c = collidedCircle;
+              const depth = maxDepth;
+              const bounce = 0.25; // Lower bounciness for soft, solid collisions
+
+              if (collisionType === 'left') {
                 pill.cx += depth;
-                circles.forEach(circle => circle.wx += depth);
-                
-                const rx = c.wx - pill.cx;
                 const ry = c.wy - pill.cy;
                 const vCx = pill.vx - pill.va * ry;
                 if (vCx < 0) {
@@ -272,15 +360,8 @@ export default function FloatingPills() {
                   pill.vx += j / pill.mass;
                   pill.va += (j * rn) / pill.inertia;
                 }
-              }
-
-              // Right Wall
-              if (c.wx + c.r > w - pad) {
-                const depth = (c.wx + c.r) - (w - pad);
+              } else if (collisionType === 'right') {
                 pill.cx -= depth;
-                circles.forEach(circle => circle.wx -= depth);
-
-                const rx = c.wx - pill.cx;
                 const ry = c.wy - pill.cy;
                 const vCx = pill.vx - pill.va * ry;
                 if (vCx > 0) {
@@ -289,35 +370,22 @@ export default function FloatingPills() {
                   pill.vx -= j / pill.mass;
                   pill.va += (j * rn) / pill.inertia;
                 }
-              }
-
-              // Bottom Wall (Floor)
-              if (c.wy + c.r > h - pad) {
-                const depth = (c.wy + c.r) - (h - pad);
+              } else if (collisionType === 'floor') {
                 pill.cy -= depth;
-                circles.forEach(circle => circle.wy -= depth);
-                hasCollidedWithFloor = true;
-
                 const rx = c.wx - pill.cx;
-                const ry = c.wy - pill.cy;
                 const vCy = pill.vy + pill.va * rx;
                 if (vCy > 0) {
                   const rn = -rx;
-                  // Settle quicker on floor: slightly lower bounciness
-                  const j = -(1 + bounce * 0.4) * (-vCy) / (1 / pill.mass + (rn * rn) / pill.inertia);
+                  const j = -(1 + bounce * 0.3) * (-vCy) / (1 / pill.mass + (rn * rn) / pill.inertia);
                   pill.vy -= j / pill.mass;
                   pill.va += (j * rn) / pill.inertia;
                 }
-              }
-
-              // Top Wall (Ceiling - only if already fully inside)
-              if (pill.cy - pill.height / 2 > pad && c.wy - c.r < pad) {
-                const depth = pad - (c.wy - c.r);
+                // Damping on the floor to stabilize sliding
+                pill.vx *= 0.93;
+                pill.va *= 0.90;
+              } else if (collisionType === 'ceiling') {
                 pill.cy += depth;
-                circles.forEach(circle => circle.wy += depth);
-
                 const rx = c.wx - pill.cx;
-                const ry = c.wy - pill.cy;
                 const vCy = pill.vy + pill.va * rx;
                 if (vCy < 0) {
                   const rn = rx;
@@ -326,12 +394,6 @@ export default function FloatingPills() {
                   pill.va += (j * rn) / pill.inertia;
                 }
               }
-            });
-
-            // Extra friction on the ground to prevent infinite sliding
-            if (hasCollidedWithFloor) {
-              pill.vx *= 0.94;
-              pill.va *= 0.92;
             }
           });
 
@@ -344,6 +406,9 @@ export default function FloatingPills() {
               const circles1 = getPillCircles(p1);
               const circles2 = getPillCircles(p2);
 
+              let deepestCollision = null;
+              let maxDepth = 0;
+
               circles1.forEach((c1) => {
                 circles2.forEach((c2) => {
                   const dx = c1.wx - c2.wx;
@@ -353,82 +418,82 @@ export default function FloatingPills() {
 
                   if (distSq < minDist * minDist) {
                     const dist = Math.sqrt(distSq) || 0.001;
-                    const nx = dx / dist;
-                    const ny = dy / dist;
                     const depth = minDist - dist;
-
-                    const invMass1 = (i === dragIdx) ? 0 : 1 / p1.mass;
-                    const invInertia1 = (i === dragIdx) ? 0 : 1 / p1.inertia;
-                    const invMass2 = (j === dragIdx) ? 0 : 1 / p2.mass;
-                    const invInertia2 = (j === dragIdx) ? 0 : 1 / p2.inertia;
-
-                    const totalInvMass = invMass1 + invMass2;
-                    if (totalInvMass === 0) return;
-
-                    // Positional correction (Baumgarte)
-                    const percent = 0.45;
-                    const slop = 0.05;
-                    const correctionAmount = Math.max(depth - slop, 0) / totalInvMass * percent;
-                    const correctionX = correctionAmount * nx;
-                    const correctionY = correctionAmount * ny;
-
-                    if (i !== dragIdx) {
-                      p1.cx += correctionX * invMass1;
-                      p1.cy += correctionY * invMass1;
-                      circles1.forEach(circle => {
-                        circle.wx += correctionX * invMass1;
-                        circle.wy += correctionY * invMass1;
-                      });
-                    }
-                    if (j !== dragIdx) {
-                      p2.cx -= correctionX * invMass2;
-                      p2.cy -= correctionY * invMass2;
-                      circles2.forEach(circle => {
-                        circle.wx -= correctionX * invMass2;
-                        circle.wy -= correctionY * invMass2;
-                      });
-                    }
-
-                    // Contact point offsets from centers
-                    const contactX = c2.wx + nx * c2.r;
-                    const contactY = c2.wy + ny * c2.r;
-
-                    const r1x = contactX - p1.cx;
-                    const r1y = contactY - p1.cy;
-                    const r2x = contactX - p2.cx;
-                    const r2y = contactY - p2.cy;
-
-                    const v1x = p1.vx - p1.va * r1y;
-                    const v1y = p1.vy + p1.va * r1x;
-                    const v2x = p2.vx - p2.va * r2y;
-                    const v2y = p2.vy + p2.va * r2x;
-
-                    const rvx = v1x - v2x;
-                    const rvy = v1y - v2y;
-                    const velAlongNormal = rvx * nx + rvy * ny;
-
-                    if (velAlongNormal < 0) { // Moving towards each other
-                      const rn1 = r1x * ny - r1y * nx;
-                      const rn2 = r2x * ny - r2y * nx;
-
-                      const e = 0.55; // Restitution
-                      const denom = invMass1 + invMass2 + (rn1 * rn1) * invInertia1 + (rn2 * rn2) * invInertia2;
-                      const impulse = -(1 + e) * velAlongNormal / denom;
-
-                      if (i !== dragIdx) {
-                        p1.vx += impulse * invMass1 * nx;
-                        p1.vy += impulse * invMass1 * ny;
-                        p1.va += impulse * rn1 * invInertia1;
-                      }
-                      if (j !== dragIdx) {
-                        p2.vx -= impulse * invMass2 * nx;
-                        p2.vy -= impulse * invMass2 * ny;
-                        p2.va -= impulse * rn2 * invInertia2;
-                      }
+                    if (depth > maxDepth) {
+                      maxDepth = depth;
+                      deepestCollision = { c1, c2, dx, dy, dist, depth };
                     }
                   }
                 });
               });
+
+              if (deepestCollision) {
+                const { c2, dx, dy, dist, depth } = deepestCollision;
+                const nx = dx / dist;
+                const ny = dy / dist;
+
+                const invMass1 = (i === dragIdx) ? 0 : 1 / p1.mass;
+                const invInertia1 = (i === dragIdx) ? 0 : 1 / p1.inertia;
+                const invMass2 = (j === dragIdx) ? 0 : 1 / p2.mass;
+                const invInertia2 = (j === dragIdx) ? 0 : 1 / p2.inertia;
+
+                const totalInvMass = invMass1 + invMass2;
+                if (totalInvMass > 0) {
+                  // Positional correction (Baumgarte) - soft to avoid jitter
+                  const percent = 0.28;
+                  const slop = 0.08;
+                  const correctionAmount = Math.max(depth - slop, 0) / totalInvMass * percent;
+                  const correctionX = correctionAmount * nx;
+                  const correctionY = correctionAmount * ny;
+
+                  if (i !== dragIdx) {
+                    p1.cx += correctionX * invMass1;
+                    p1.cy += correctionY * invMass1;
+                  }
+                  if (j !== dragIdx) {
+                    p2.cx -= correctionX * invMass2;
+                    p2.cy -= correctionY * invMass2;
+                  }
+
+                  // Contact point offsets from centers
+                  const contactX = c2.wx + nx * c2.r;
+                  const contactY = c2.wy + ny * c2.r;
+
+                  const r1x = contactX - p1.cx;
+                  const r1y = contactY - p1.cy;
+                  const r2x = contactX - p2.cx;
+                  const r2y = contactY - p2.cy;
+
+                  const v1x = p1.vx - p1.va * r1y;
+                  const v1y = p1.vy + p1.va * r1x;
+                  const v2x = p2.vx - p2.va * r2y;
+                  const v2y = p2.vy + p2.va * r2x;
+
+                  const rvx = v1x - v2x;
+                  const rvy = v1y - v2y;
+                  const velAlongNormal = rvx * nx + rvy * ny;
+
+                  if (velAlongNormal < 0) { // Moving towards each other
+                    const rn1 = r1x * ny - r1y * nx;
+                    const rn2 = r2x * ny - r2y * nx;
+
+                    const e = 0.22; // Low restitution for a solid, premium feel (no rattle/jitter)
+                    const denom = invMass1 + invMass2 + (rn1 * rn1) * invInertia1 + (rn2 * rn2) * invInertia2;
+                    const impulse = -(1 + e) * velAlongNormal / denom;
+
+                    if (i !== dragIdx) {
+                      p1.vx += impulse * invMass1 * nx;
+                      p1.vy += impulse * invMass1 * ny;
+                      p1.va += impulse * rn1 * invInertia1;
+                    }
+                    if (j !== dragIdx) {
+                      p2.vx -= impulse * invMass2 * nx;
+                      p2.vy -= impulse * invMass2 * ny;
+                      p2.va -= impulse * rn2 * invInertia2;
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -469,6 +534,14 @@ export default function FloatingPills() {
       x: pointerX - pill.cx,
       y: pointerY - pill.cy
     };
+
+    // Calculate local click offset relative to the pill's rotated coordinate frame
+    const dx = pointerX - pill.cx;
+    const dy = pointerY - pill.cy;
+    const cosA = Math.cos(pill.angle);
+    const sinA = Math.sin(pill.angle);
+    pill.dragLocalX = dx * cosA + dy * sinA;
+    pill.dragLocalY = -dx * sinA + dy * cosA;
 
     pill.vx = 0;
     pill.vy = 0;
