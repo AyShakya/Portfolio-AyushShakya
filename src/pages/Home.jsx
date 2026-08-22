@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { loadPortfolioData } from '../utils/contentLoader';
 import FloatingPills from '../components/FloatingPills';
 import DotMatrixFace from '../components/DotMatrixFace';
 import DotMatrixCloud from '../components/DotMatrixCloud';
-import CompassWidget from '../components/CompassWidget';
-import ClockWidget from '../components/ClockWidget';
-import WeatherWidget from '../components/WeatherWidget';
+import N1WidgetsCard from '../components/N1WidgetsCard';
 import ImagePlaceholder from '../components/ImagePlaceholder';
 import PhoneWidgetDashboard from '../components/PhoneWidgetDashboard';
 import TransitionImage from '../components/TransitionImage';
@@ -48,6 +46,7 @@ const scrollRevealVariants = {
 
 export default function Home() {
   const [data] = useState(() => loadPortfolioData());
+  const [activeTab, setActiveTab] = useState('panels'); // 'panels' or 'sensors'
 
   const { bio, experiences, works } = data;
   const allWorks = works;
@@ -85,41 +84,86 @@ export default function Home() {
       >
         
         {/* Left Card: Light Gray Container with Interactive Panels */}
-        <div className="bg-neutral-100 dark:bg-neutral-900/30 p-8 md:p-12 xl:p-[5vw] flex items-center justify-center border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 transition-colors w-full">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 items-center justify-items-center w-full">
-            
-            {/* Column 1: Dot Face */}
-            <div className="w-full flex justify-center">
-              <DotMatrixFace />
-            </div>
-
-            {/* Column 2: Status Pills */}
-            <div className="flex flex-col gap-3 w-full max-w-[130px] justify-center">
-              <div className="flex items-center gap-2 px-4 py-2.5 bg-neutral-900 text-neutral-100 dark:bg-neutral-900/90 dark:text-neutral-100 rounded-full border border-neutral-800 text-xs font-mono font-medium shadow-sm w-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-neutral-100 animate-pulse"></span>
-                Sunny
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2.5 bg-neutral-950 text-neutral-300 dark:bg-neutral-950 dark:text-neutral-300 rounded-full border border-neutral-900 text-xs font-mono font-medium shadow-sm hover:text-white cursor-pointer hover:bg-neutral-900 transition-all w-full">
-                <span className="text-[10px]">&#9632;</span>
-                TV remote
-              </div>
-            </div>
-
-            {/* Column 3: Portrait Slat Placeholder */}
-            <div className="w-full flex justify-center group/slat">
-              <img 
-                src="/images/portrait_slats.jpg" 
-                alt="Portrait" 
-                className="w-32 h-32 md:w-36 md:h-36 rounded-none object-cover border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm transition-transform duration-300 group-hover/slat:scale-[1.04]"
-              />
-            </div>
-
-            {/* Column 4: Dot Cloud */}
-            <div className="w-full flex justify-center">
-              <DotMatrixCloud />
-            </div>
-
+        <div className="bg-neutral-100 dark:bg-neutral-900/30 p-8 md:p-12 xl:p-[5vw] flex flex-col items-center justify-center border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 transition-colors w-full relative group">
+          
+          {/* Subtle switcher toggle buttons */}
+          <div className="absolute top-4 right-4 flex gap-1 z-10 select-none">
+            <button 
+              onClick={() => setActiveTab('panels')}
+              className={`px-3 py-1.5 rounded-full text-[10px] font-mono tracking-widest uppercase transition-all duration-200 border cursor-pointer ${
+                activeTab === 'panels'
+                  ? 'bg-neutral-900 text-neutral-100 border-neutral-850 dark:bg-[#eaeaea] dark:text-[#161618] dark:border-neutral-200 shadow-sm'
+                  : 'bg-transparent text-neutral-500 border-transparent hover:text-neutral-900 dark:hover:text-neutral-100'
+              }`}
+            >
+              Panels
+            </button>
+            <button 
+              onClick={() => setActiveTab('sensors')}
+              className={`px-3 py-1.5 rounded-full text-[10px] font-mono tracking-widest uppercase transition-all duration-200 border cursor-pointer ${
+                activeTab === 'sensors'
+                  ? 'bg-neutral-900 text-neutral-100 border-neutral-850 dark:bg-[#eaeaea] dark:text-[#161618] dark:border-neutral-200 shadow-sm'
+                  : 'bg-transparent text-neutral-500 border-transparent hover:text-neutral-900 dark:hover:text-neutral-100'
+              }`}
+            >
+              Sensors
+            </button>
           </div>
+
+          <AnimatePresence mode="wait">
+            {activeTab === 'panels' ? (
+              <motion.div 
+                key="panels"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="grid grid-cols-2 sm:grid-cols-4 gap-6 items-center justify-items-center w-full mt-6 lg:mt-0"
+              >
+                {/* Column 1: Dot Face */}
+                <div className="w-full flex justify-center">
+                  <DotMatrixFace />
+                </div>
+
+                {/* Column 2: Status Pills */}
+                <div className="flex flex-col gap-3 w-full max-w-[130px] justify-center">
+                  <div className="flex items-center gap-2 px-4 py-2.5 bg-neutral-900 text-neutral-100 dark:bg-neutral-900/90 dark:text-neutral-100 rounded-full border border-neutral-800 text-xs font-mono font-medium shadow-sm w-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-neutral-100 animate-pulse"></span>
+                    Sunny
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2.5 bg-neutral-950 text-neutral-300 dark:bg-neutral-950 dark:text-neutral-300 rounded-full border border-neutral-900 text-xs font-mono font-medium shadow-sm hover:text-white cursor-pointer hover:bg-neutral-900 transition-all w-full">
+                    <span className="text-[10px]">&#9632;</span>
+                    TV remote
+                  </div>
+                </div>
+
+                {/* Column 3: Portrait Slat Placeholder */}
+                <div className="w-full flex justify-center group/slat">
+                  <img 
+                    src="/images/portrait_slats.jpg" 
+                    alt="Portrait" 
+                    className="w-32 h-32 md:w-36 md:h-36 rounded-none object-cover border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm transition-transform duration-300 group-hover/slat:scale-[1.04]"
+                  />
+                </div>
+
+                {/* Column 4: Dot Cloud */}
+                <div className="w-full flex justify-center">
+                  <DotMatrixCloud />
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="sensors"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full flex justify-center mt-6 lg:mt-0"
+              >
+                <N1WidgetsCard />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Right Card: Turntable Mockup & Phone Dashboard */}
@@ -202,9 +246,12 @@ export default function Home() {
                     <div className="flex-grow pr-4 text-left">
                       <h3 
                         style={{ viewTransitionName: `project-title-${work.id}` }}
-                        className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block"
+                        className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-flex items-center gap-1.5"
                       >
                         {work.title}
+                        <span className="inline-block opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 font-sans text-xs text-neutral-400">
+                          ↗
+                        </span>
                       </h3>
                       <p className="text-xs text-neutral-500 mt-1">
                         {work.category}
