@@ -34,7 +34,11 @@ export default function TransitionImage({ src, alt, className = '', style = {}, 
           initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 1.02, filter: 'blur(8px)' }}
           animate={isLoaded ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : {}}
           transition={transitionEffect}
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover ${
+            shouldReduceMotion 
+              ? '' 
+              : 'transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105'
+          }`}
           {...props}
         />
       )}

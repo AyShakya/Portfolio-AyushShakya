@@ -69,12 +69,12 @@ export default function Archive() {
                   <TransitionImage 
                     src={item.image} 
                     alt={item.title} 
-                    className="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="w-full h-full rounded-none"
                   />
                 ) : (
                   <ImagePlaceholder 
                     description={item.placeholder} 
-                    className="w-full h-full !min-h-0 !rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="w-full h-full !min-h-0 !rounded-none transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
                   />
                 )}
               </div>
@@ -109,12 +109,12 @@ export default function Archive() {
                   <TransitionImage 
                     src={item.image} 
                     alt={item.title} 
-                    className="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="w-full h-full rounded-none"
                   />
                 ) : (
                   <ImagePlaceholder 
                     description={item.placeholder} 
-                    className="w-full h-full !min-h-0 !rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="w-full h-full !min-h-0 !rounded-none transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
                   />
                 )}
               </div>

@@ -86,8 +86,6 @@ export default function Works() {
     }
 
     const currentIdx = works.findIndex(w => w.id === projectId);
-    const nextWork = works[(currentIdx + 1) % works.length];
-    const prevWork = works[(currentIdx - 1 + works.length) % works.length];
 
     const renderImagesGrid = () => {
       const images = work.images || [];
@@ -96,7 +94,7 @@ export default function Works() {
           <div className="p-8 md:p-[5vw] w-full flex items-stretch">
             <ImagePlaceholder 
               description={work.placeholder}
-              className="w-full h-full !min-h-[300px] !rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
+              className="w-full h-full !min-h-[300px] !rounded-none transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
             />
           </div>
         );
@@ -112,7 +110,7 @@ export default function Works() {
               src={visibleImages[0]} 
               alt={`${work.title} - 1`} 
               style={{ viewTransitionName: `project-image-${work.id}` }}
-              className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+              className="w-full h-auto"
             />
           </div>
         );
@@ -126,11 +124,11 @@ export default function Works() {
                 src={visibleImages[0]} 
                 alt={`${work.title} - 1`} 
                 style={{ viewTransitionName: `project-image-${work.id}` }}
-                className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" 
+                className="w-full h-auto" 
               />
             </div>
             <div className="group flex items-stretch">
-              <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto" />
             </div>
           </div>
         );
@@ -144,15 +142,15 @@ export default function Works() {
                 src={visibleImages[0]} 
                 alt={`${work.title} - 1`} 
                 style={{ viewTransitionName: `project-image-${work.id}` }}
-                className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.01]" 
+                className="w-full h-auto" 
               />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
               <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-                <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto" />
               </div>
               <div className="group flex items-stretch">
-                <TransitionImage src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto" />
               </div>
             </div>
           </div>
@@ -167,17 +165,17 @@ export default function Works() {
                 src={visibleImages[0]} 
                 alt={`${work.title} - 1`} 
                 style={{ viewTransitionName: `project-image-${work.id}` }}
-                className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" 
+                className="w-full h-auto" 
               />
             </div>
             <div className="group border-b border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-              <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto" />
             </div>
             <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-              <TransitionImage src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              <TransitionImage src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto" />
             </div>
             <div className="group flex items-stretch">
-              <TransitionImage src={visibleImages[3]} alt={`${work.title} - 4`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+              <TransitionImage src={visibleImages[3]} alt={`${work.title} - 4`} className="w-full h-auto" />
             </div>
           </div>
         );
@@ -192,22 +190,22 @@ export default function Works() {
                   src={visibleImages[0]} 
                   alt={`${work.title} - 1`} 
                   style={{ viewTransitionName: `project-image-${work.id}` }}
-                  className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" 
+                  className="w-full h-auto" 
                 />
               </div>
               <div className="group flex items-stretch">
-                <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[1]} alt={`${work.title} - 2`} className="w-full h-auto" />
               </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 items-stretch">
               <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-                <TransitionImage src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[2]} alt={`${work.title} - 3`} className="w-full h-auto" />
               </div>
               <div className="group border-b lg:border-b-0 lg:border-r border-neutral-200/50 dark:border-neutral-900 flex items-stretch">
-                <TransitionImage src={visibleImages[3]} alt={`${work.title} - 4`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[3]} alt={`${work.title} - 4`} className="w-full h-auto" />
               </div>
               <div className="group flex items-stretch">
-                <TransitionImage src={visibleImages[4]} alt={`${work.title} - 5`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                <TransitionImage src={visibleImages[4]} alt={`${work.title} - 5`} className="w-full h-auto" />
               </div>
             </div>
           </div>
@@ -233,10 +231,10 @@ export default function Works() {
                     src={img} 
                     alt={`${work.title} - ${i + 1}`} 
                     style={{ viewTransitionName: `project-image-${work.id}` }}
-                    className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" 
+                    className="w-full h-auto" 
                   />
                 ) : (
-                  <TransitionImage src={img} alt={`${work.title} - ${i + 1}`} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+                  <TransitionImage src={img} alt={`${work.title} - ${i + 1}`} className="w-full h-auto" />
                 )}
               </div>
             );
@@ -323,24 +321,32 @@ export default function Works() {
 
         {/* Navigation Controls */}
         <motion.div variants={childVariants} className="flex justify-between items-center p-8 md:p-[5vw]">
-          <Link 
-            to={`/works/${prevWork.id}`}
-            viewTransition
-            className="text-xs md:text-sm font-semibold tracking-wider text-neutral-450 dark:text-neutral-400 hover:text-[#161618] dark:hover:text-[#eaeaea] transition-colors uppercase"
-          >
-            <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
-              &larr; PREV
-            </motion.span>
-          </Link>
-          <Link 
-            to={`/works/${nextWork.id}`}
-            viewTransition
-            className="text-xs md:text-sm font-semibold tracking-wider text-neutral-450 dark:text-neutral-400 hover:text-[#161618] dark:hover:text-[#eaeaea] transition-colors uppercase"
-          >
-            <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
-              NEXT &rarr;
-            </motion.span>
-          </Link>
+          {currentIdx > 0 ? (
+            <Link 
+              to={`/works/${works[currentIdx - 1].id}`}
+              viewTransition
+              className="text-xs md:text-sm font-semibold tracking-wider text-neutral-450 dark:text-neutral-400 hover:text-[#161618] dark:hover:text-[#eaeaea] transition-colors uppercase"
+            >
+              <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
+                &larr; PREV
+              </motion.span>
+            </Link>
+          ) : (
+            <div />
+          )}
+          {currentIdx < works.length - 1 ? (
+            <Link 
+              to={`/works/${works[currentIdx + 1].id}`}
+              viewTransition
+              className="text-xs md:text-sm font-semibold tracking-wider text-neutral-450 dark:text-neutral-400 hover:text-[#161618] dark:hover:text-[#eaeaea] transition-colors uppercase"
+            >
+              <motion.span whileHover={{ y: -2 }} className="inline-block transition-transform">
+                NEXT &rarr;
+              </motion.span>
+            </Link>
+          ) : (
+            <div />
+          )}
         </motion.div>
 
       </motion.div>
@@ -397,12 +403,12 @@ export default function Works() {
                       src={work.image} 
                       alt={work.title} 
                       style={{ viewTransitionName: `project-image-${work.id}` }}
-                      className="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
+                      className="w-full h-full rounded-none"
                     />
                   ) : (
                     <ImagePlaceholder 
                       description={work.placeholder} 
-                      className="w-full h-full !min-h-0 !rounded-none transition-transform duration-300 group-hover:scale-[1.04]"
+                      className="w-full h-full !min-h-0 !rounded-none transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
                     />
                   )}
                 </div>
