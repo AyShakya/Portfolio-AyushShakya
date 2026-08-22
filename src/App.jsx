@@ -4,9 +4,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ReactLenis, useLenis } from 'lenis/react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Works from './pages/Works';
-import Archive from './pages/Archive';
+
+// Lazy load pages for optimized loading speed and bundle code-splitting
+const Home = React.lazy(() => import('./pages/Home'));
+const Works = React.lazy(() => import('./pages/Works'));
+const Archive = React.lazy(() => import('./pages/Archive'));
 
 import 'lenis/dist/lenis.css';
 
@@ -16,6 +18,18 @@ const pageTransition = {
   exit: { opacity: 0, y: -12 },
   transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] }
 };
+
+// Premium minimal loader aligning with the Nothing Tech hardware design
+function PageLoader() {
+  return (
+    <div className="w-full flex-grow min-h-[50vh] flex flex-col items-center justify-center gap-4 text-center font-mono">
+      <div className="flex items-center gap-2.5 px-4 py-2.5 bg-neutral-900 border border-neutral-850 dark:bg-neutral-900/90 dark:border-neutral-800 rounded-full text-xs text-neutral-400 font-medium select-none shadow-sm animate-pulse">
+        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
+        LOADING...
+      </div>
+    </div>
+  );
+}
 
 function PageWrapper({ children }) {
   const lenis = useLenis();
@@ -36,7 +50,9 @@ function PageWrapper({ children }) {
       variants={pageTransition}
       className="w-full flex-grow flex flex-col"
     >
-      {children}
+      <React.Suspense fallback={<PageLoader />}>
+        {children}
+      </React.Suspense>
     </motion.div>
   );
 }
