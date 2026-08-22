@@ -410,9 +410,12 @@ export default function Works() {
                   <div className="flex-grow pr-4 text-left">
                     <h3 
                       style={{ viewTransitionName: `project-title-${work.id}` }}
-                      className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-block"
+                      className="text-base font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition-transform duration-300 ease-out group-hover:translate-x-[6px] inline-flex items-center gap-1.5"
                     >
                       {work.title}
+                      <span className="inline-block opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 font-sans text-xs text-neutral-400">
+                        ↗
+                      </span>
                     </h3>
                     <p className="text-xs text-neutral-500 mt-1">
                       {work.category}
