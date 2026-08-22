@@ -44,6 +44,7 @@ export default function FloatingPills() {
     motionOpacity: motionValues[idx].opacity
   })));
 
+  const [activeDragIndex, setActiveDragIndex] = useState(null);
   const draggingIndexRef = useRef(null);
   const pointerRef = useRef({ x: 0, y: 0 });
   const pointerOffsetRef = useRef({ x: 0, y: 0 });
@@ -523,6 +524,7 @@ export default function FloatingPills() {
     const pill = pillsRef.current[index];
     draggingIndexRef.current = index;
     pill.isDragging = true;
+    setActiveDragIndex(index);
 
     const rect = containerRef.current.getBoundingClientRect();
     const pointerX = e.clientX - rect.left;
@@ -579,6 +581,7 @@ export default function FloatingPills() {
         }
       }
       draggingIndexRef.current = null;
+      setActiveDragIndex(null);
     };
 
     window.addEventListener('pointermove', handlePointerMove);
@@ -597,6 +600,7 @@ export default function FloatingPills() {
       {isReady && pillsRef.current.map((pill, idx) => {
         const isCircle = pill.type === 'circle' || pill.type === 'circle-arrow';
         const isSquircle = pill.type === 'kix' || pill.type === 'oval-small';
+        const isDragged = activeDragIndex === idx;
 
         return (
           <motion.div
@@ -611,12 +615,23 @@ export default function FloatingPills() {
             }}
             onPointerDown={(e) => handlePointerDown(e, idx)}
             whileHover={{ scale: 1.05 }}
-            className={`absolute left-0 top-0 cursor-grab active:cursor-grabbing select-none font-mono tracking-[0.12em] border flex items-center justify-center text-center transition-[border-color,background-color,box-shadow] duration-300 ${
+            whileTap={{ scale: 1.08 }}
+            className={`absolute left-0 top-0 cursor-grab active:cursor-grabbing select-none font-mono tracking-[0.12em] border flex items-center justify-center text-center transition-[border-color,background-color,box-shadow,color] duration-300 ${
               isCircle 
-                ? 'rounded-full font-sans text-4xl md:text-6xl font-bold leading-none bg-[#eaeaea] text-[#161618] border-transparent shadow-[0_6px_16px_rgba(0,0,0,0.12)]' 
+                ? `rounded-full font-sans text-4xl md:text-6xl font-bold leading-none bg-[#eaeaea] text-[#161618] border-transparent light:bg-[#161618] light:text-[#eaeaea] ${
+                    isDragged ? 'shadow-[0_12px_28px_rgba(0,0,0,0.22)]' : 'shadow-[0_6px_16px_rgba(0,0,0,0.12)]'
+                  }` 
                 : isSquircle
-                  ? 'rounded-[16px] text-xs md:text-sm font-normal text-[#eaeaea] border-[#eaeaea]/25 bg-transparent hover:bg-white/5 hover:border-white/40 shadow-sm'
-                  : 'rounded-full text-xs md:text-sm font-normal text-[#eaeaea] border-[#eaeaea]/25 bg-transparent hover:bg-white/5 hover:border-white/40 shadow-sm'
+                  ? `rounded-[16px] text-xs md:text-sm font-normal text-[#eaeaea] bg-transparent hover:bg-white/5 hover:border-white/40 light:text-[#161618] light:border-[#161618]/25 light:hover:bg-black/5 ${
+                      isDragged 
+                        ? 'border-white/60 bg-white/5 shadow-[0_8px_24px_rgba(255,255,255,0.08)] light:border-neutral-900/60 light:bg-black/5' 
+                        : 'border-[#eaeaea]/25 shadow-sm'
+                    }`
+                  : `rounded-full text-xs md:text-sm font-normal text-[#eaeaea] bg-transparent hover:bg-white/5 hover:border-white/40 light:text-[#161618] light:border-[#161618]/25 light:hover:bg-black/5 ${
+                      isDragged 
+                        ? 'border-white/60 bg-white/5 shadow-[0_8px_24px_rgba(255,255,255,0.08)] light:border-neutral-900/60 light:bg-black/5' 
+                        : 'border-[#eaeaea]/25 shadow-sm'
+                    }`
             }`}
           >
             {pill.text}
