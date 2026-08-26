@@ -408,7 +408,7 @@ export default function Works() {
                   ) : (
                     <ImagePlaceholder 
                       description={work.placeholder} 
-                      className="w-full h-full !min-h-0 !rounded-none transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
+                      className="w-full h-full !min-h-0 !rounded-none transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
                     />
                   )}
                 </div>

@@ -142,7 +142,7 @@ export default function Home() {
                   <img 
                     src="/images/portrait_slats.jpg" 
                     alt="Portrait" 
-                    className="w-32 h-32 md:w-36 md:h-36 rounded-none object-cover border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm transition-transform duration-300 group-hover/slat:scale-[1.04]"
+                    className="w-32 h-32 md:w-36 md:h-36 rounded-none object-cover border border-neutral-200/50 dark:border-neutral-900/60 shadow-sm transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/slat:scale-[1.04]"
                   />
                 </div>
 
@@ -238,7 +238,7 @@ export default function Home() {
                     ) : (
                       <ImagePlaceholder 
                         description={work.placeholder} 
-                        className="w-full h-full !min-h-0 !rounded-none transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
+                        className="w-full h-full !min-h-0 !rounded-none transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
                       />
                     )}
                   </div>
