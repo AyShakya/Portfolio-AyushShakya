@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
 
 export default function TransitionImage({ src, alt, className = '', style = {}, ...props }) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -7,18 +7,28 @@ export default function TransitionImage({ src, alt, className = '', style = {}, 
 
   useEffect(() => {
     if (!src) return;
+    setIsLoaded(false);
     const img = new Image();
     img.src = src;
     img.onload = () => setIsLoaded(true);
   }, [src]);
 
-  const transitionEffect = shouldReduceMotion
-    ? { opacity: { duration: 0.25 } }
-    : {
-        opacity: { duration: 0.45 },
-        scale: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
-        filter: { duration: 0.4 }
-      };
+  // Use transition-all to handle opacity, transform (scale), and filter (blur) transitions smoothly
+  const transitionClass = shouldReduceMotion
+    ? 'transition-opacity duration-250 ease-out'
+    : 'transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]';
+
+  // Base state classes for image loading transition
+  const stateClass = isLoaded
+    ? 'opacity-100 scale-100 blur-none'
+    : shouldReduceMotion
+      ? 'opacity-0'
+      : 'opacity-0 scale-[1.02] blur-[8px]';
+
+  // Smooth hover scaling on both parent-group hover and direct image hover
+  const hoverClass = shouldReduceMotion
+    ? ''
+    : 'group-hover:scale-105 hover:scale-105';
 
   return (
     <div className={`relative overflow-hidden w-full h-full bg-neutral-900/10 dark:bg-neutral-900/30 ${className}`} style={style}>
@@ -28,17 +38,10 @@ export default function TransitionImage({ src, alt, className = '', style = {}, 
       )}
 
       {src && (
-        <motion.img
+        <img
           src={src}
           alt={alt}
-          initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 1.02, filter: 'blur(8px)' }}
-          animate={isLoaded ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : {}}
-          transition={transitionEffect}
-          className={`w-full h-full object-cover ${
-            shouldReduceMotion 
-              ? '' 
-              : 'transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105'
-          }`}
+          className={`w-full h-full object-cover ${transitionClass} ${stateClass} ${hoverClass}`}
           {...props}
         />
       )}
