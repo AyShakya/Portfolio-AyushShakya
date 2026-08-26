@@ -1,9 +1,12 @@
 import React from 'react';
 
 export default function ImagePlaceholder({ description, className = '', style = {} }) {
+  const hasCustomTransition = className.includes('transition-');
+  const transitionClasses = hasCustomTransition ? '' : 'transition-all duration-300 ease-out';
+
   return (
     <div 
-      className={`relative @container bg-neutral-900/60 dark:bg-neutral-900/40 border border-dashed border-neutral-800 dark:border-neutral-800 rounded-2xl flex flex-col items-center justify-center p-[6cqw] text-center select-none overflow-hidden transition-all duration-300 group-hover:border-neutral-700 ${className}`}
+      className={`relative @container bg-neutral-900/60 dark:bg-neutral-900/40 border border-dashed border-neutral-800 dark:border-neutral-800 rounded-2xl flex flex-col items-center justify-center p-[6cqw] text-center select-none overflow-hidden group-hover:border-neutral-700 ${transitionClasses} ${className}`}
       style={{ minHeight: '200px', ...style }}
     >
       {/* Background blueprint grid pattern */}
