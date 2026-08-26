@@ -72,15 +72,20 @@ export default function PhoneWidgetDashboard() {
         <div className="absolute bottom-10 right-20 w-8 h-8 bg-neutral-700 rounded-full"></div>
       </div>
 
-      {/* The Phone Mockup */}
+      {/* The Phone Mockup Wrapper for Responsive Scale */}
       <div 
-        className="relative w-[300px] h-[550px] bg-black rounded-[42px] p-3 shadow-2xl border-[6px] border-neutral-800 transition-all duration-500 group-hover:-rotate-1 origin-center"
         style={{
-          transform: 'scale(min(0.95, calc(65cqw / 550)))'
+          transform: 'scale(min(0.95, calc(65cqw / 550)))',
+          transformOrigin: 'center'
         }}
+        className="flex items-center justify-center"
       >
-        {/* Screen Bezel */}
-        <div className="w-full h-full bg-[#050505] rounded-[36px] overflow-y-auto no-scrollbar p-3 pt-6 flex flex-col gap-3 relative border border-neutral-900 text-white">
+        {/* The Phone Mockup Element for Hover Rotation */}
+        <div 
+          className="relative w-[300px] h-[550px] bg-black rounded-[42px] p-3 shadow-2xl border-[6px] border-neutral-800 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-rotate-1 origin-center"
+        >
+          {/* Screen Bezel */}
+          <div className="w-full h-full bg-[#050505] rounded-[36px] overflow-y-auto no-scrollbar p-3 pt-6 flex flex-col gap-3 relative border border-neutral-900 text-white">
           
           {/* Dynamic Island Notch */}
           <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-20 flex items-center justify-between px-3">
@@ -248,5 +253,6 @@ export default function PhoneWidgetDashboard() {
         </div>
       </div>
     </div>
+  </div>
   );
 }
