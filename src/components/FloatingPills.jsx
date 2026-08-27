@@ -1,10 +1,18 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
 
-export default function FloatingPills() {
+export default function FloatingPills({ delay = 0.5 }) {
   const containerRef = useRef(null);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const [isReady, setIsReady] = useState(false);
+  const [startSim, setStartSim] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setStartSim(true);
+    }, delay * 1000);
+    return () => clearTimeout(timer);
+  }, [delay]);
 
   // Motion values to update coordinates at 60fps without triggering React renders
   const motionValues = [
@@ -118,6 +126,12 @@ export default function FloatingPills() {
             pill.cx = Math.max(minCx, Math.min(maxCx, pill.cx));
             pill.cy = Math.max(minCy, Math.min(maxCy, pill.cy));
           }
+
+          // Set initial motion values so they are positioned correctly before simulation starts
+          pill.motionX.set(pill.cx - pill.width / 2);
+          pill.motionY.set(pill.cy - pill.height / 2);
+          pill.motionRotate.set(pill.angle * (180 / Math.PI));
+          pill.motionOpacity.set(0);
         });
         setIsReady(true);
       }
@@ -130,6 +144,7 @@ export default function FloatingPills() {
 
   // Frame-by-frame physics loop
   useEffect(() => {
+    if (!startSim) return;
     let animationFrameId;
 
     const step = () => {
@@ -516,7 +531,7 @@ export default function FloatingPills() {
 
     animationFrameId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [containerSize, isReady]);
+  }, [containerSize, isReady, startSim]);
 
   // Pointer dragging implementation
   const handlePointerDown = (e, index) => {

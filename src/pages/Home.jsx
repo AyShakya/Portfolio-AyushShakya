@@ -58,7 +58,7 @@ export default function Home() {
       <section className="relative flex flex-col items-center justify-between min-h-[40vh] pt-6 pb-8 border-b border-neutral-200/30 dark:border-transparent w-full">
         {/* Floating Draggable Badges */}
         <div className="w-full relative z-10">
-          <FloatingPills />
+          <FloatingPills delay={0.5} />
         </div>
 
         {/* Big Hero Title with Masked Reveal */}
